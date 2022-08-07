@@ -4,13 +4,13 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 ## Material del curso
 
 ### Semana 1: Introducción al curso y al análisis de datos
-- [Presentación](/semana-1.html)
+- [Presentación](/general/semana-1.html)
 
 ### Semana 2: Introducción a Stata
-- [Presentación](/semana-2.html)
-- [Código de clase](/scripts/clase-semana-2.do)
-- [Ejercicios](/scripts/ej-semana-2.do)
-- [Solución de ejercicios](/scripts/soluciones-semana-2.do)
+- [Presentación](/stata/semana-2.html)
+- [Código de clase](/do-files/clase-semana-2.do)
+- [Ejercicios](/do-files/ej-semana-2.do)
+- [Solución de ejercicios](/do-files/soluciones-semana-2.do)
 
 ### Semana 3: Introducción a Stata II
 
