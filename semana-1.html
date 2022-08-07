@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción al análisis de datos</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+    <script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introducción al análisis de datos
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+# Análisis de datos
+
+---
+
+## Análisis de datos
+
+.content-box-green[*"Data analysis is the process by which data becomes understanding, knowledge and insight".*
+Hadley Wickham
+]
+
+--
+
+.center[
+&lt;img src="ima/flow.svg" width="600px" /&gt;
+]
+
+.right[Fuente: R4DS]
+
+---
+
+## ¿Por qué analizar datos?
+
+.content-box-green[
+*"In God we trust, others must bring data".* 
+W. E. Deming]
+
+--
+
+- **Investigación**
+--
+
+- **Mercado laboral**
+--
+
+- **Revolución de los datos**
+--
+
+- **Revolución de las computadoras**
+
+---
+
+## Ciencia de datos
+
+.center[
+&lt;img src="ima/diagrama.png" width="600px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Softwares estadísticos y programación
+
+---
+
+## Softwares estadisticos
+
+Los softwares o paquetes estadíticos son programas informáticos diseñado para llevar a cabo análisis estadísticos. Algunos de los más utilizados son SPSS, Stata, SAS o R. 
+
+.center[
+&lt;img src="ima/softwares.png" width="350px" /&gt;
+]
+
+.right[Fuente: R4DS]
+
+---
+
+## Modalidades de uso de softwares estadísticos
+
+- Point and click o GUI (Interfaz gráfica del usuario)
+
+- Programación 
+
+.center[
+&lt;img src="ima/gui_cli.png" width="400px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# ¿Por qué programar?
+
+---
+# ¿Por qué programar?
+
+.center[
+&lt;img src="ima/awful_gui.png" width="750px" /&gt;
+]
+
+.right[Fuente: https://www.brodrigues.co/]
+
+---
+# ¿Por qué programar?
+
+- El error de Reinhart y Rogoff
+
+--
+
+- El trabajo de Reinhart y Rogoff mostró que el crecimiento económico real promedio se desacelera (una disminución del 0,1 %) cuando la deuda de un país aumenta a más del 90 % del producto interno bruto (PIB), y esta cifra del 90 % se empleó repetidamente en argumentos políticos sobre austeridad de alto perfil. medidas.
+
+--
+
+- Olvidaron seleccionar una fila que contenía 5 de los 20 países analizados, y el declive de 0.1% se transformaba en un crecimiento de 2.2%
+
+--
+
+- ¿Qué podría haber sido distinto si Reinhart y Rogoff hubieran utilizado un lenguaje de programación?
+
+
+---
+
+## ¿Por qué programar?
+
+- **Eficiencia:** Si bien programar llevará más tiempo al principio, rápidamente permite ahorrar mucho tiempo en comparación a tareas realizadas a través de una interfaz gráfica. 
+--
+
+- **Más posibilidades:** En los softwares estadísticos tradicionales muchas operaciones (las más complejas o especificas) suelen no estar disponibles en la interfaz gráfica por lo que solo se pueden realizar mediante el uso de código.  
+
+--
+- **Recolección de datos:** Saber programar abre la posibilidad para la recolección de datos que no es posible o es muy costosa manualmente.
+
+--
+- **Reproducibildiad:** El análisis de datos mediante programación mejora la transparencia y reproducibilidad en el proceso de generación de conocimiento
+
+--
+- **Colaboración:** La programación abre la puerta para una colaboración mucho más sencilla y eficiente. 
+
+---
+class: inverse, center, middle
+
+# Sobre del curso
+
+---
+
+## Objetivos
+
+- Este curso no es para memorizar, es para aprender a resolver problemas nuevos.
+- Aprender a estructurar, manipular, analizar y visualizar datos 
+- Adquirir herramientas para comprender y escribir código en R (reutilizable y interpretable) para el análisis de datos
+- Adquirir conocimientos para aprender de forma independiente funciones en R
+- Adquirir nociones básicas de Stata y Python para el análisis de datos
+
+--- 
+
+---
+
+## Estructura de curso
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Semana &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Tema &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Introducción al curso y al análisis de datos &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Introducción a Stata &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Introducción a Stata II &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Primera evaluación parcial &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Introducción a R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 6 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Introducción a R II &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Importar y limpiar datos en R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Estadística descriptiva en R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manipulación de datos en R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 10 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manipulación de datos en R II &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 11 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Visualización de datos en R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Programación &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 13 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Segunda evaluación parcial &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 14 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Webscrapping, redes y análisis de texto en R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Introducción a Python &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Semana 16 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Presentaciones y cierre del curso &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+
+## Detalles de curso
+
+- **Calificación:** Una calificación ḿınima de BMB es requerida para exonerar el curso y una de B para obtener derecho a examen.
+- **Asistencia:** Los alumnos deberían asistir al 75% de las clases para tener la posibilidad de exonerar el curso u obtener derecho a examen
+- **Horario:** El curso se dictar a los ́días martes y jueves de 8:00 a 9:20
+- **Evaluación:** 
+  - Primera evaluación parcial 20 %
+  - Segunda evaluación parcial 40 %
+  - Trabajo final 40 %
+
+---
+
+class: inverse, center, middle
+
+# Funcionamiento del curso
+
+---
+
+## Regla de los 5 minutos
+
+- Cuando estamos trabajando en ejercicios prácticos y nos enfrentamos a una situación que no podemos resolver en nuestro primer intento, debemos probar durante al menos 5 minutos resolverlo sin preguntar, aplicando los siguientes pasos. 
+
+---
+
+## Pasos a seguir si no funciona una línea de código: Paso 1
+
+- En caso de haber un mensaje de error, leerlo. Traducirlo si es necesario. La mayoría de las veces la solución se puede deducir del mensaje de error. 
+
+.center[
+&lt;img src="ima/error.png" width="600px" /&gt;
+]
+
+---
+
+## Pasos a seguir si no funciona una línea de código: Paso 2
+
+- Chequear que no haya errores de tipeo. Si hay una letra fuera de lugar, los programas no podrán correr el código. Tener especial cuidados a mayusculas/minúsculas, acentos y puntuación.
+
+
+.center[
+&lt;img src="ima/typo.jpeg" width="300px" /&gt;
+]
+
+---
+
+## Pasos a seguir si no funciona una línea de código: Paso 3
+
+- Si los primeros 2 puntos no funcionan, no entrar en pánico. Probablemente sea tu culpa, la computadora no hace otra cosa que llevar a cabo las instrucciones que vos le das. No escudarse en "esto no anda". Es muy difícil y poco probable toparse con un error que no sea nuestro en las funciones que vamos a utilizar en este curso. 
+
+.center[
+&lt;img src="ima/fault.jpg" width="300px" /&gt;
+]
+
+---
+
+## Pasos a seguir si no funciona una línea de código: Paso 4
+
+- Redefinir el problema. Definir concretamente qué esperamos que ese código haga, a qué objetos y cuál es el resultado esperado. Chequear que le estemos dando las instrucciones correctas a la computadora. 
+
+
+.center[
+&lt;img src="ima/debug_duck.png" width="350px" /&gt;
+]
+
+---
+
+## Pasos a seguir si no funciona una línea de código: Paso 5
+- Googlear. En programación, una enorme cantidad del tiempo es destinada a entender por qué las cosas no funcionan de la forma en que esperabamos. Abrir el navegador, escribir r al comienzo (o el lenguaje/software que estemos utilizando) y luego describir el problema. En lo posible, recomiendo hacerlo en inglés, incluso si es nescesario utilizar el traductor. Ser claro y especifico en la búsqueda, y leer con atención las publicaciones que aparecen (tanto la pregunta como la respuesta).
+
+.center[
+&lt;img src="ima/r_meme.jpg" width="350px" /&gt;
+]
+
+---
+
+## Pasos a seguir si no funciona una línea de código: Paso 6
+
+- Pedir ayuda. En caso de que los anteriores pasos no funcionen, pidan ayuda. A compañeros o al profesor. Pero es importante agotar los recursos antes, porque los códigos que no funcionan no desaparecen.
+
+.center[
+&lt;img src="ima/ayuda.jpg" width="350px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Softwares estadísticos
+
+---
+
+## Softwares estadísticos y lenguajes de programación
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Software &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Acceso &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Uso &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; SPSS &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Pago &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; GUI y código &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Stata &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Pago &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; GUI y código &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; R &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Libre &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Código &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Python &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Libre &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Código &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## SPSS
+
+- **Ventajas:** 
+  - Buen GUI
+  - Funciona muy bien para datos de encuestas
+
+- **Desventajas:** 
+  - Pago
+  - Pocas funcionalidades
+
+---
+
+## Stata
+
+- **Ventajas:** 
+  - Relativamente sencillo de usar
+  - Bastantes funcionalidades
+
+- **Desventajas:** 
+  - Pago
+  - Incompleto (machine learning, geolocalización, etc.)
+
+---
+
+## R
+
+- **Ventajas:** 
+  - Gratuito y libre
+  - Muy completo y flexible
+  - Comunidad de usuarios
+  - Foco en estadítica
+
+- **Desventajas:** 
+  - Puede ser lento
+  - Curva de aprendizaje
+
+---
+
+## Python
+
+- **Ventajas:** 
+  - Muy potente
+  - Muchas funcionalidades
+  - Sintáxis clara
+  - Buena comunidad
+
+- **Desventajas:** 
+  - No está particularmente pensado para estadística
+  - Curva de aprendizaje
+
+---
+class: inverse, center, middle
+
+# ¿Cómo pensar los datos?
+
+---
+
+## Ejercicio
+
+.content-box-green[
+*En una planilla de excel creen una tabla con 5 países y datos sobre ellos. Debe tener al menos dos datos por país.*
+]
+
+--
+
+.content-box-green[
+*Ahora, en esa misma planilla transformen esa tabla en una base de datos.*
+]
+
+---
+
+## Estructura de datos
+
+- Un dataframe o marco de datos (es lo que nos solemos referir como "base de datos")
+
+- Es una forma de estructurar datos con filas y columnas. Las filas suelen ser las observaciones y las columnas las variables
+
+.center[
+&lt;img src="ima/tidy_data.png" width="700px" /&gt;
+]
+
+.right[[Wichkham &amp; Grolemund (2018)](https://r4ds.had.co.nz/tidy-data.html)]
+
+---
+
+## Base de datos
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; pais &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; capital &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; continente &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Uruguay &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Montevideo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; América &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Suiza &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Berna &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europa &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Egipto &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; El Cairo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; África &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Irán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Teherán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Austrlia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Canberra &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Oceanía &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Ejercicio
+
+.content-box-green[
+*Agregar información sobre el lenguaje de estos países*
+]
+
+---
+
+## Base de datos
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; pais &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; capital &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; continente &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; idiomas &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Uruguay &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Montevideo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; América &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Español &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Suiza &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Berna &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Alemán, Italiano, Francés y Romance &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Egipto &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; El Cairo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; África &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Árabe &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Irán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Teherán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Persa &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Austrlia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Canberra &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Oceanía &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Inglés &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Base de datos
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; pais &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; capital &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; continente &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; idiomas &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Uruguay &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Montevideo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; América &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Español &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Suiza &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Berna &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Alemán &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Egipto &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; El Cairo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; África &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Árabe &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Irán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Teherán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Persa &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Austrlia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Canberra &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Oceanía &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Inglés &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Base de datos
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; pais &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; capital &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; continente &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; idioma_1 &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; idioma_2 &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; idioma_3 &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; idioma_4 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Uruguay &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Montevideo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; América &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Español &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Suiza &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Berna &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Alemán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Francés &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Italiano &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Romance &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Egipto &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; El Cairo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; África &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Árabe &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Irán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Teherán &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Persa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Austrlia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Canberra &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Oceanía &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Inglés &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+class: inverse, center, middle
+
+# Flujo de trabajo
+
+---
+## Flujo de trabajo
+
+.center[
+&lt;img src="ima/flow.svg" width="600px" /&gt;
+]
+
+.right[Fuente: R4DS]
+
+---
+
+## Ejercicio
+
+.content-box-green[
+*¿Cuáles son los 5 países de América del Sur con mayor densidad de población?*
+]
+
+---
+class: inverse, center, middle
+
+# Carpeta del curso
+
+---
+
+## Crear una carpeta
+
+- Crear una carpeta para guardar los archivos del curso, con el nombre que prefieran
+
+- Descargar de la webasignatura la carpeta "data" y pegarla (con ese nombre), dentro de la carpeta creada en el punto anterior
+
+- Crea una carpeta para guardar los do files y scripts (archivos de código) del curso. 
+
+- Crea además dos carpetas más dentro de tu carpeta: "graficos" y "resultados"
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

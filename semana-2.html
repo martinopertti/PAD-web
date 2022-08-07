@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción a Stata</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introducción a Stata
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+# Sobre Stata
+
+---
+
+## Introducción a Stata
+
+- Stata es un paquete estadístico poderoso con muchas técnicas estadísticas disponibles.
+
+--
+
+- Es simple de usar y rápido.
+
+--
+
+- Es un software pago
+
+--
+
+- Tiene una importate comunidad de usuarios
+
+---
+
+## Interfaz
+
+.center[
+&lt;img src="ima/interfaz.png" width="700px" /&gt;
+]
+
+---
+
+## Do file
+
+- Un do file es un archivo de texto standard que Stata ejecuta si se escribe do *filename*
+
+- Todo lo que hagamos en Stata para el curso debe ser hecho desde un do file. 
+
+- El uso de do files tiene varias ventajas:
+  - Permite que el análisis sea reproducible
+  - Permite hacer anotaciones 
+  - Permite encontrar errores en el código de forma más eficiente
+
+---
+
+## Comandos básicos
+
+- Las funciones o comandos en Stata son case sensitive, tener ciudado con las mayúsculas. 
+
+--
+
+- Si escribimos `help mean` obtendremos información sobre el comando  
+
+--
+
+- `clear` sirve para eliminar los datos cargados de la memoria de Stata
+
+--
+
+`summarize` o `sum` sirve para obtener una descripción de los datos (particularmente útil para variables numéricas)
+
+--
+
+- `tabulate` o `tab` sirve para imprimir una tabla de una o dos variables
+
+--
+
+- `mean` sirve para estimar la media de una o más variables.
+
+---
+
+## Comentarios
+
+- Cuando escribimos código siempre es importante hacer comentarios y anotaciones tanto para que otros puedan entender y reutilizar el código así como para nosotros mismos.
+
+- Stata no correrá las lineas de código que comienzen con `*`, `//` o `/*`.
+
+- También se puede utilizar al final de una línea de código
+
+- Se puede quebrar una línea utilizando `///`
+
+---
+class: inverse, center, middle
+
+# Importar datos en Stata
+
+---
+
+## Editor de datos
+
+.center[
+&lt;img src="ima/editor.jpg" width="700px" /&gt;
+]
+
+---
+
+## Importar datos en Stata
+
+- Nuestros do files siempre comenzarán diciéndole a Stata en qué carpeta queremos trabajar. Debemos definir la carpeta en la que se encuentran los datos que queremos utilizar y donde irán las tablas, gráficos o datos transformados que exportaremos más adelante. 
+
+- Para fijar el directorio utilizamos el comando `cd`
+
+- Para importar los datos (si ya se encuentran en formato `.dta`), utilziamos la función `use`
+
+- Supongamos que yo tengo una base de datos en formato stata llamada "mis_datos" dentro de una carpeta llamada "mi_carpeta". Para importarla correctamente a Stata debo correr:
+
+
+
+```r
+cd "C:Usuarios/carpeta_general/mi_carpeta" // Fijo directorio
+
+use "mis_datos.dta" // Importo base
+```
+
+---
+
+## Archivos en formato Stata (.dta)
+
+- Los archivos de datos en formato Stata tienen la extensión .dta
+
+- Pueden tener hasta 2000 variables (aproximadamente) y millones de observaciones.
+
+
+---
+
+## Importar datos desde otros formatos
+
+Podemos también importar en Stata archivos de datos en otros formatos: 
+
+
+```r
+import delimited "wb_paises.csv" // Archivos .csv
+
+import excel "wb_paises.xlsx", firstrow // Archivos .xlsx
+```
+
+---
+class: inverse, center, middle
+
+# Explorar datos
+
+---
+
+## Summarize
+
+
+```r
+summarize pob_mujeres pob_hombres pob_total
+```
+
+.center[
+&lt;img src="ima/summarize.png" width="700px" /&gt;
+]
+
+---
+
+## List
+
+Con `list` podemos listar los valores de una o más variables. Se usa frecuentemente para chequeos específicos o en bases de datos con pocas observaciones. 
+
+
+```r
+list country_name pob_total pob_mujeres pob_hombres if region == 5 
+```
+
+.center[
+&lt;img src="ima/list.png" width="700px" /&gt;
+]
+
+
+---
+
+## Tablas
+
+- Como vimos anteriormente podemos utilizar `tabulate` o `tab` para crear tablas de una o dos variables. Con `table` podemos agregar estadísticos como la media a una tabla.
+
+- Con la opción `contents` o su abreviación `c` podemos usar estadísticos. Por ejemplo
+
+
+```r
+table region, c(n tasa_desempleo mean tasa_desempleo sd tasa_desempleo min tasa_desempleo max tasa_desempleo) 
+```
+
+.center[
+&lt;img src="ima/table_1.png" width="700px" /&gt;
+]
+
+---
+
+## Tablas
+
+`table` permite también agregar estadísticos a tablas bivariadas. A su vez, `table` tiene otras opciones como row y column
+
+
+```r
+table region income_group, c(mean tasa_desempleo) row 
+```
+
+.center[
+&lt;img src="ima/table_2.png" width="700px" /&gt;
+]
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Crear una tabla con la media de acceso a electrcididad y emisiones de co_2 según grupos de ingresos*
+]
+
+
+---
+class: inverse, center, middle
+
+# Variables
+
+---
+
+## Variables
+
+- Los nombres de las variables pueden tener hasta 32 caracteres pero dentro de lo posible restringirlas a menos de 12 y no utilizar mayúsculas
+
+- Cuando nombramos variables es mejor tratar de relacionarlas a su contenido. Por ejemplo supongamos que tenemos dos variables de edad una numérica con la edad en años y otra con cuatro categorías de edad (18 a 29; 30 a 49; 50 a 64 y 65 o más). Es mejor nombrarlas con algo que refiera a su contenido como `edad_num` y `edad_cat` que como `edad_1` y `edad_2` o aun peor `var_2` y `var_3`.
+
+- Es una buena práctica asignar una etiqueta a la variable con una descripción. Por ejemplo nuestra variable `edad` puede tener una etiqueta "Edad de los encuestados (númerica, en años)" "Edad de los encuestados (en 4 categorías)"
+
+---
+
+## Tipos de variables
+
+- Los softwares estadíticos tienen distintos tipos de almacenamiento de datos para determinar cómo y qué datos guardar sobre una variable o valor. 
+
+--
+
+- A grandes rasgos existen dos grandes tipos de almacenamiento: numérico y strings (cadenas o texto). 
+
+--
+
+- El formato de texto lo usamos para variables que contienen texto no estructurado o identificadores. 
+
+--
+
+- A su vez, dentro de cada tipo (*data type*) existen distintos formatos de almacenamiento (*storage type*), que determinar por ejemplo cuántos valores luego de la coma se almacenan ej. (byte, int, etc.)
+
+--
+
+- Por más información utilizar: `help datatype`
+
+---
+
+## Cambiar variable de tipo
+
+Un error frecuente al crear una variable es ingresar una letra por error en una variable que iba a ser numérica. En ese caso Stata transformará toda la variable a string (porque las strings pueden contener números pero las numéricas no pueden contener texto). Para resolver este tipo de situaciones Stata tiene comandos que transforman las variables de un tipo a otro. De carácteres (string) a numérica: 
+
+
+```r
+destring varlist, replace
+```
+
+De numérica a string:
+
+
+```r
+decode varlist, replace
+```
+
+
+---
+
+## Variables categóricas y ordinales
+
+- En general, las variables ordinales o categóricas en Stata las almacenamos como numéricas con su correspondientes etiquetas para cada valor, debido a que para realizar varios análisis estadísticos (como regresiones) Stata necesita que estén en ese formato en lugar de en formato texto. 
+
+- Es importate asignar etiquetas cuando almacenamos estas variables como numéricas.
+
+---
+
+## Consultar tipos de datos, almacenamiento y etiquetas 
+
+- Con el comando `describe` obtenemos para cada variable (o las variables seleccionadas) el nombre, el tipo de almacenamiento y en caso de existir el nombre de las etiquetas (value label) y la etiqueta de la variable (variable label)
+
+- Con el comando `codebook` obtenemos una descripción de cada variable que incluye el tipo de variable, cantidad de valores únicos, valores perdidos, ejemplos, advertencias y frecuencias con sus etiquetas o percentiles en caso de aplicar. 
+
+- Con el comando `labelbook` obtenemos un libro de códigos solo para las variables que tienen etiquetas en sus valores (value label) con sus correspondencias y datos adicionales.
+
+---
+
+## Manipular etiquetas 
+
+Para etiquetar una variable:
+
+
+```r
+label variable pob_total "Población total del país"
+```
+
+Se necesitan dos pasos en Stata para definir etiquetas. primero se crea la etiqueta que asocia codigos numéricos con etiquetas con el comando `label define` para luego asignar esa etiqueta creada (que lleva un nombre) a una variable ya existente, con el comando `label values`. Se puede aplicar la misma etqieuta a muchas variables cuando utilizamos las variables tienen la misma escala. 
+
+.codefont[
+
+```r
+## Crear nueva variable (si el país tiene al menos 10 millones de habitantes)
+generate pais_10m = 0 
+replace pais_10m = 1 if pob_total &gt;= 10000000
+ta pais_10m
+
+## Primero creo las etiquetas de los valores con el nombre "pais_10m"
+label define pais_10m 0 "Menos de 10M habitantes" 1 "Más de 10M habitantes", replace
+
+## Luego pego las etiquetas de los valores a la variable
+label values pais_10m pais_10m
+
+## Asigno también etiqueta a la variable (descripción)
+label variable pais_10m "Si el país tiene una población mayor o menor a 10 millones de habitantes"
+```
+]
+
+---
+class: inverse, center, middle
+
+# Valores perdidos
+
+---
+
+## Valores perdidos
+
+- La mayoría de los softwares estatdísticos prevee y distingue a los casos perdidos (valores para los que no tenemos información), en Stata los valores perdidos son representados por un punto `.`. En general Stata omite los casos perdidos al aplicar un comando pero es recomendable ver la documentación de cada comando si tenemos casos perdidos para estar seguros.
+
+- Por ejemplo, si queremos crear una variable vacía, es decir, solo con valores perdidos:
+
+
+```r
+generate newvar = .
+```
+
+- Los datos de encuestas muchas veces utilizan códigos como 88 o 99 para señalar los datos perdidos (ej. cuando los enceustados no quieren responder una pregunta). Tener cuidado de que definir en Stata que esos son casos perdidos.
+
+
+```r
+replace varname = . if varname == 88
+replace varname = . if varname == 99
+```
+
+---
+
+## Consultar valores perdidos
+
+A la hora de consultar si nuestros datos tienen casos perdidos tenmos varias opciones. 
+- Usando `misstable` podemos chequear las observaciones perdidas por variable.
+- Con `list` podemos chequear que observaciones tienen datos perdidos
+- Con `tabulate`, podemos poner la opción missing para ver los datos perdidos
+
+
+```r
+misstable summarize 
+
+list country_name if missing(income_group)
+
+tabulate income_group
+tabulate income_group, missing
+```
+
+---
+
+## Recodificar con valores perdidos
+
+Tenemos que tener especial cuidado cuando recodificamos variables que tienen casos perdidos. Por ejemplo, si queremos recodificar la variable de `tasa_desempleo` en mayor o menor a 10 y que los casos perdidos por supuesto se mantengan como casos perdidos, este código no funcionará:
+
+
+```r
+generate tasa_desempleo_rec = .
+replace tasa_desempleo_rec = 1 if tasa_desempleo &gt;= 10
+replace tasa_desempleo_rec = 0 if tasa_desempleo &lt; 10
+```
+
+Debemos agregar:
+
+
+```r
+replace tasa_desempleo_rec = . if tasa_desempleo == .
+```
+
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Con la base de datos de wb_paises identificar cuántos valores perdidos hay para la variable area_selvatica y cuáles son esos países*
+]
+
+
+---
+class: inverse, center, middle
+
+# Guardar datos
+
+--- 
+
+---
+
+## Guardar datos
+
+- Muchas veces cuando escribimos código en un do-file, exportamos lo que necesitamos (si es que queremos exportar algo) y es suficiente con tener la base de datos original y el do-file. 
+
+- Sin embargo, a veces queremos guardar una nueva base de datos con los cambios que le realizamos. En estos casos lo mejor suele ser no reemplazar la base de datos original, sino que guardar una nueva con otro nombre. 
+
+- Para guardar los datos modificamos usamos:
+
+
+```r
+save "carpeta_ejemplo/data_nueva", replace
+```
+
+
+---
+class: inverse, center, middle
+
+# Sintáxis básica
+
+
+---
+
+## Sintáxis básica
+
+.codefont[
+
+```r
+[by varlist:] command [varlist] [=exp] [if exp] [weight] [,options]
+```
+]
+
+- **command** es usualmente un verbo y el único elemento imprescindible, generalmente viene acompañado del nombre de una o más variables. Muchas veces se pueden abreviar ej. `summarize` puede usarse como `sum`
+
+- **varlist** esto refiere a la variable o las variables a las que se le aplica el comando/función. También se pueden abreviar. También cuando se quiere aplicar a un conjunto de variables por ejemplo que empiezen con determinados caracteres. Ej:  `summarize pob_*` nos devolverá un resumen de todas las variables que comiencen con "pob_"
+
+
+
+```r
+summarize pob_hombres pob_mujeres
+```
+
+---
+
+## Sintáxis básica
+
+.codefont[
+
+```r
+[by varlist:] command [varlist] [=exp] [if exp] [weight] [,options]
+```
+]
+
+- **=exp** es para cuando nuestro comando genera una nueva variable y debemos definir que valor tendrá. En este caso generamos una variable nueva llamada `log_pob_total` que es el logaritmo de la variable ya existente `pob_total`, y otra donde no necesitamos usar un comando en la expresión simplemente dividimos la población por 1.000.000 para obtener esa variable en millones.
+
+
+```r
+generate log_pob_total = log(pob_total)
+generate pob_total_m = pob_total/1000000
+```
+
+
+---
+
+## Sintáxis básica
+
+.codefont[
+
+```r
+[by varlist:] command [varlist] [=exp] [if exp] [weight] [,options]
+```
+]
+
+- **if exp** la acción de un comando puede aplicarse a una parte específica de nuestros datos. Por ejemplo, supongamos que quiero un resumen de la variable pob_total pero solo para los países de América Latina. Entonces debo fijarme el valor de América Latina en la variable región (3), y establecer el condicional luego del uso estandar del comando.
+
+
+```r
+summarize pob_total if region == 3
+```
+
+.center[
+&lt;img src="ima/sum_if.png" width="700px" /&gt;
+]
+
+---
+
+## Sintáxis básica
+
+.codefont[
+
+```r
+[by varlist:] command [varlist] [=exp] [if exp] [weight] [,options]
+```
+]
+
+- **options** la mayoría de los comandos tienen opciones que se definen al final, luego de una coma. Por ejemplo, la variable summarize tiene una opción "detail" para que se agreguen más estadísticos al resumen
+
+
+```r
+summarize pob_total, detail
+```
+
+.center[
+&lt;img src="ima/sum_detail.png" width="500px" /&gt;
+]
+
+
+---
+
+## Sintáxis básica
+
+.codefont[
+
+```r
+[by varlist:] command [varlist] [=exp] [if exp] [weight] [,options]
+```
+]
+
+- **weight** sirve para ponderar los datos, simplemente se define el tipo de ponderador y el nombre del mismo entre [] ej. 
+
+
+```r
+mean [aweight = ponderador]
+```
+
+---
+
+## Sintáxis básica
+
+.codefont[
+
+```r
+[by varlist:] command [varlist] [=exp] [if exp] [weight] [,options]
+```
+]
+
+- **by** un comando muy importante es by, y sirve para decirle a Stata que repita un comando para distintos grupos de observaciones (definidos por los valores de la variable especificada luego del by). Para utilizar el comando by es necesario utilizar el comando sort anteriormente. Por ejemplo, si queremos calcular la media de `pob_total` según región podemos hacer:
+
+
+```r
+sort income_group
+by income_group: summarize pob_total
+```
+
+---
+
+## Sintáxis básica
+
+.center[
+&lt;img src="ima/sum_by.png" width="750px" /&gt;
+]
+
+---
+
+## Sintáxis básica
+
+Para no tener que usar sort primero y by después, se puede utilizar bysort directamente y ahorrarse un paso:
+
+
+```r
+bysort income_group: summarize pob_total
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
