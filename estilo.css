@@ -1,0 +1,31 @@
+.codefont pre {
+    font-size: 18px;
+    line-height: 16px;
+}
+
+.codefontchico pre {
+    font-size: 16px;
+    line-height: 13px;
+}
+
+.inverse h1{
+  color: #FFFFFF;
+  font-weight: normal;
+}
+
+.title-slide h1, .title-slide h2, .title-slide h3, .title-slide h4 {
+  font-weight: normal;
+}
+
+.heading-slide {
+  font-weight: normal;          
+}
+
+a, a > code {
+  color: #9932CC;
+  text-decoration: none; /* turns off background coloring of links */
+}
+
+.remark-code, .remark-inline-code { 
+                                    font-size: 90%;
+                                  }
