@@ -27,30 +27,38 @@ use "wb_paises.dta"
 * Breve resumen de variables
 summarize pob_mujeres pob_hombres pob_total
 
-* Tablas
+* Tablas simples
+tabulate region 
 tabulate region income_group 
+tab region income_group 
 
 * Media
 mean pob_total
+mean region // ¿Cómo interpretar?
+mean country_name // ¿Por qué no funciona?
 
 
 **** Importar desde otros formatos ------------------------------------------
 
-import delimited "wb_paises.csv"
-import excel "wb_paises.xlsx", firstrow
+import delimited "wb_paises.csv", clear
+import excel "wb_paises.xlsx", firstrow clear
 clear // Limpio la memoria
 
 
 **** Explorar datos ---------------------------------------------------------
 
 * Cargo nuevamente la base
-use "wb_paises_edit.dta"
+use "wb_paises.dta"
 
 ** List para listar valores de variables
 list if region == 5 // Listar países de Norteamerica
 list country_name pob_total pob_mujeres pob_hombres if region == 5 // Listar países de Norteamerica variables específicas
 
 ** Con table podemos crear tablas más flexibles
+* Solo frecuencia
+table region
+* Diferencia con tab
+tab region
 * Tabla por región con la media de tres variables
 table region, c(mean pob_total mean pob_mujeres mean pob_hombres)
 * Tabla por region con distintos estadísticos de una misma variable
