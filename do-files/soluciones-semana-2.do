@@ -5,8 +5,8 @@
 
 
 **** Cargar datos -----------------------------------------------------------
-cd "C:/Users/marti/Dropbox/cursos/Programación para el análisis de datos/clases/data" 
-use "wb_paises.dta"
+cd "C:/Users/marti/Dropbox/cursos/Programación para el análisis de datos/clases" 
+use "data/wb_paises.dta"
 
 ** 1. Listar el nombre, grupo de ingreso y poblacion total los países de la región "South Asia"
 list country_name income_group pob_total if region == 6

@@ -18,19 +18,11 @@ clear
 
 * - Podemos fijar primero el directorio de trabajo con cd y luego simplemente
 * el nombre del archivo luego del comando use. Esta es la versión recomendada
-cd "C:/Users/marti/Dropbox/cursos/Programación para el análisis de datos/clases/data" 
-use "wb_paises.dta"
+cd "C:/Users/marti/Dropbox/cursos/Programación para el análisis de datos/clases" 
+use "data/wb_paises.dta"
 
 
 **** Primeros comandos basicos  ---------------------------------------------
-
-* Breve resumen de variables
-summarize pob_mujeres pob_hombres pob_total
-
-* Tablas simples
-tabulate region 
-tabulate region income_group 
-tab region income_group 
 
 * Media
 mean pob_total
@@ -40,19 +32,30 @@ mean country_name // ¿Por qué no funciona?
 
 **** Importar desde otros formatos ------------------------------------------
 
-import delimited "wb_paises.csv", clear
-import excel "wb_paises.xlsx", firstrow clear
+import delimited "data/wb_paises.csv", clear
+import excel "data/wb_paises.xlsx", firstrow clear
 clear // Limpio la memoria
 
 
 **** Explorar datos ---------------------------------------------------------
 
 * Cargo nuevamente la base
-use "wb_paises.dta"
+use "data/wb_paises.dta"
+
+* Breve resumen de variables
+summarize // Todas las variables
+summarize pob_mujeres pob_hombres pob_total // Variables específicas
+summarize pob_* // todas las variables que empiezan con "pob"
 
 ** List para listar valores de variables
+list // Lista todos los valores de todas las observaciones
 list if region == 5 // Listar países de Norteamerica
 list country_name pob_total pob_mujeres pob_hombres if region == 5 // Listar países de Norteamerica variables específicas
+
+* Tablas simples
+tabulate region 
+tabulate region income_group 
+tab region income_group 
 
 ** Con table podemos crear tablas más flexibles
 * Solo frecuencia
@@ -73,6 +76,11 @@ table region income_group, c(mean tasa_desempleo) row column
 
 
 **** Etiquetas y variables --------------------------------------------------
+
+* Explorar tipos y etiquetas de variables
+describe pais_10m
+codebook // todas las variables
+labelbook // Solo variables con etiquetas
 
 * Asignar etiqueta a variable
 label variable pob_total "Población total del país"
@@ -125,10 +133,10 @@ tabulate tasa_desempleo_rec, missing
 
 * Guardamos usando el comando save (solo pongo el nombre de la nueva base porque
 * ya fijé el directorio usando cd al principo del do-file
-save "wb_paises_edit.dta", replace
+save "data/wb_paises_edit.dta", replace
 
 * Chequeo que se haya guardado bien
-use "wb_paises_edit.dta", clear
+use "data/wb_paises_edit.dta", clear
 ta tasa_desempleo_rec
 
 

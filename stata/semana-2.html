@@ -235,9 +235,24 @@ list country_name pob_total pob_mujeres pob_hombres if region == 5
 
 ---
 
-## Tablas
+## Tablas con tabulate o tab
 
-- Como vimos anteriormente podemos utilizar `tabulate` o `tab` para crear tablas de una o dos variables. Con `table` podemos agregar estadísticos como la media a una tabla.
+Como vimos anteriormente podemos utilizar `tabulate` o `tab` para crear tablas de una o dos variables.
+
+
+```r
+tabulate region 
+```
+
+.center[
+&lt;img src="ima/tabulate.png" width="600px" /&gt;
+]
+
+---
+
+## Tablas con table
+
+-  Con `table` podemos agregar estadísticos como la media a una tabla.
 
 - Con la opción `contents` o su abreviación `c` podemos usar estadísticos. Por más detalles ver [documentación](https://www.stata.com/manuals13/rtable.pdf).
 
@@ -252,7 +267,7 @@ table region, c(n tasa_desempleo mean tasa_desempleo sd tasa_desempleo min tasa_
 
 ---
 
-## Tablas
+## Tablas con table
 
 `table` permite también agregar estadísticos a tablas bivariadas. A su vez, `table` tiene otras opciones como row y column
 
@@ -294,7 +309,7 @@ class: inverse, center, middle
 
 ## Tipos de variables
 
-- Los softwares estadíticos tienen distintos tipos de almacenamiento de datos para determinar cómo y qué datos guardar sobre una variable o valor. 
+- Los softwares estadísticos tienen distintos tipos de almacenamiento de datos para determinar cómo y qué datos guardar sobre una variable o valor. 
 
 --
 
@@ -303,6 +318,11 @@ class: inverse, center, middle
 --
 
 - El formato de texto lo usamos para variables que contienen texto no estructurado o identificadores. 
+
+--
+
+- En general, las variables ordinales o categóricas en Stata las almacenamos como numéricas con su correspondientes etiquetas para cada valor, debido a que para realizar varios análisis estadísticos (como regresiones) Stata necesita que estén en ese formato en lugar de en formato texto. Es importate asignar etiquetas cuando almacenamos estas variables como numéricas.
+
 
 --
 
@@ -316,7 +336,9 @@ class: inverse, center, middle
 
 ## Cambiar el tipo de una variable
 
-Un error frecuente al crear una variable es ingresar una letra por error en una variable que iba a ser numérica. En ese caso Stata transformará toda la variable a string (porque las strings pueden contener números pero las numéricas no pueden contener texto). Para resolver este tipo de situaciones Stata tiene comandos que transforman las variables de un tipo a otro. De carácteres (string) a numérica: 
+Un error frecuente al crear una variable es ingresar una letra por error en una variable que iba a ser numérica. En ese caso Stata transformará toda la variable a string (porque las strings pueden contener números pero las numéricas no pueden contener texto). Para resolver este tipo de situaciones Stata tiene comandos que transforman las variables de un tipo a otro. 
+
+De carácteres (string) a numérica: 
 
 
 ```r
@@ -330,14 +352,6 @@ De numérica a string:
 decode varlist, replace
 ```
 
-
----
-
-## Variables categóricas y ordinales
-
-- En general, las variables ordinales o categóricas en Stata las almacenamos como numéricas con su correspondientes etiquetas para cada valor, debido a que para realizar varios análisis estadísticos (como regresiones) Stata necesita que estén en ese formato en lugar de en formato texto. 
-
-- Es importate asignar etiquetas cuando almacenamos estas variables como numéricas.
 
 ---
 
@@ -360,7 +374,7 @@ Para etiquetar una variable:
 label variable pob_total "Población total del país"
 ```
 
-Se necesitan dos pasos en Stata para definir etiquetas. primero se crea la etiqueta que asocia codigos numéricos con etiquetas con el comando `label define` para luego asignar esa etiqueta creada (que lleva un nombre) a una variable ya existente, con el comando `label values`. Se puede aplicar la misma etqieuta a muchas variables cuando utilizamos las variables tienen la misma escala. 
+Se necesitan dos pasos en Stata para definir etiquetas. primero se crea la etiqueta que asocia codigos numéricos con etiquetas con el comando `label define` para luego asignar esa etiqueta creada (que lleva un nombre) a una variable ya existente, con el comando `label values`. Se puede aplicar la misma etiqueta a muchas variables cuando utilizamos las variables tienen la misma escala. 
 
 .codefont[
 
@@ -390,7 +404,9 @@ class: inverse, center, middle
 
 ## Valores perdidos
 
-- La mayoría de los softwares estatdísticos prevee y distingue a los casos perdidos (valores para los que no tenemos información), en Stata los valores perdidos son representados por un punto `.`. En general Stata omite los casos perdidos al aplicar un comando pero es recomendable ver la documentación de cada comando si tenemos casos perdidos para estar seguros.
+- La mayoría de los softwares estatdísticos prevee y distingue a los casos perdidos (valores para los que no tenemos información), en Stata los valores perdidos son representados por un punto `.`
+
+- En general Stata omite los casos perdidos al aplicar un comando pero es recomendable ver la documentación de cada comando si tenemos casos perdidos para estar seguros.
 
 - Por ejemplo, si queremos crear una variable vacía, es decir, solo con valores perdidos:
 
@@ -411,7 +427,7 @@ replace varname = . if varname == 99
 
 ## Consultar valores perdidos
 
-A la hora de consultar si nuestros datos tienen casos perdidos tenmos varias opciones. 
+A la hora de consultar si nuestros datos tienen casos perdidos tenemos varias opciones. 
 - Usando `misstable` podemos chequear las observaciones perdidas por variable.
 - Con `list` podemos chequear que observaciones tienen datos perdidos
 - Con `tabulate`, podemos poner la opción missing para ver los datos perdidos
