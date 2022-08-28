@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción a Stata II</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+    <script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo_stata.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introducción a Stata II
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+# Limpiar datos
+
+---
+
+## Sort
+
+- A veces queremos ordenar los datos según una variable, para eso utilizamos el comando `sort` que ordena las observaciones en orden ascendente (de menor a mayor). 
+
+- Los casos perdidos son tratados como infinitos por lo que quedan al final.
+
+- La sintáxis es `sort varlist`
+
+- El argumentos `stable` sirve para mantener el orden anterior dentro de cada subgrupo nuevo
+
+- Con `gsort` podemos ordenar de forma descendente
+
+
+```r
+sort country_name
+
+sort region, stable
+
+sort region country_name
+
+gsort - country_name
+```
+
+---
+
+## Orden de variables
+
+- El comando `order` sirve para cambiar el orden las columnas en la base de datos. 
+
+- La sintaxis es `order varlist [, options]`. Algunas de las opciones o argumentos son `first`, `last`, `before(varname)`, `after(varname)`.
+
+
+```r
+order country_name region, first
+
+order country_code, after(country_name)
+```
+
+---
+
+## Filtrar observaciones
+
+Para filtrar observaciones podemos utilizar dos comandos: `drop` y `keep`. Estos comandos van seguidos de un condicional, `drop if *exp*`.
+
+
+```r
+keep if edad == 20
+
+drop if edad &gt; 80
+```
+
+`drop` y `keep` también nos sirven para seleccionar o quitar variables (columnas). Su uso para este caso es: `drop *varlist*` 
+
+
+```r
+keep edad educacion
+
+drop ingreso genero
+```
+
+---
+
+## Operadores y expresiones
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 16px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Operadores aritméticos &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Operadores relacionales &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Operadores lógicos &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; + sumar &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;amp; y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; == igual a &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; - restar &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; | o &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; != no igual a &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; * multplicar &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ! no &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;lt; menor a &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; / dividir &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;gt; mayor a &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ^ elevar a una potencia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;lt;= menor o igual a &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;gt;= mayor o igual a &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Operadores y expresiones
+
+
+```r
+keep if tasa_desempleo &gt; 5 &amp; tasa_desempleo &lt;= 11
+
+keep if country_name == "Uruguay" | country_name == "Argentina"
+
+keep if region != "North America"    
+
+drop if tasa_desempleo &lt;= 10
+```
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Filtrar la base para quedarse solamente con las observaciones que corresponden a países de América del Norte y Uruguay*
+]
+
+---
+class: inverse, center, middle
+
+# Variables
+
+---
+
+## Crear nueva variable (expresiones genéricas)
+ 
+Para crear una nueva variable en Stata se puede utilizar el comando `generate` o `gen`.
+
+`generate` crea una nueva variable a partir de una expresión, y tiene la siguiente sintáxis: `generate newvar = exp`.
+ 
+
+```r
+gen poblacion_total_m = pob_total/1000000
+
+gen area_no_selvatica = area_total - area_selvatica
+
+gen area_selvatica_per = (area_selvatica * 100) / area_total
+
+gen co2 = co2_pc * pob_total
+```
+
+---
+
+## Funciones
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 16px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Función &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Definición &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; abs(x) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; valor absoluto de x &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; exp(x) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; función exponencial de x &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; log(x) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; logaritmo natural de x &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; round(x) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; redondea al entero más cercano de x &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sqrt(x) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; raíz cuadrada de x &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Crear una nueva variable de `pib_pc` llamada `pib_pc_2` a partir de otras variables en la base. Chequear que coincidan los valores de `pib_pc` y `pib_pc_2`*
+]
+
+---
+
+## Crear nueva variable (expresiones específicas)
+
+Para crear una variable a partir de expresiones específicas sobre valores de otra variable (ej. una variable que indique si el país es miembro del Mercosur o no), utilizamos nuevamente `gen` pero en conjunto con `replace`.
+
+De esta forma, la creación de la nueva variable se divide en al menos dos líneas. `replace` cambia el contenido de una variable ya existente (que en estos casos generamos previamente utilizando  `gen`). La sintáxis abreviada de `replace` es: `replace varname = exp`.
+
+
+```r
+gen mercosur = 0 // Primero creo variable con el valor 0 para todos
+replace mercosur = 1 if country_name == "Argentina"  
+replace mercosur = 1  if country_name == "Brasil"  
+replace mercosur = 1 if country_name == "Paraguay"  
+replace mercosur = 1 if country_name == "Uruguay"  
+```
+
+---
+
+## Crear nueva variable (expresiones específicas)
+
+
+```r
+gen pob_m3 = 0
+replace pob_m3 = 1 if pob_total &gt;= 3000000
+replace pob_m3 = . if missing(pob_total)
+
+
+gen td_rec = 0
+replace td_rec =  1 if tasa_desempleo &lt; 10
+replace td_rec =  2 if tasa_desempleo &gt;= 10 &amp; tasa_desempleo &lt; 15 
+replace td_rec =  3 if tasa_desempleo &gt;= 15
+replace td_rec = . if missing(tasa_desempleo)
+```
+
+---
+
+## Crear nueva variable con egen
+
+- `egen` sirve para crear nuevas variables con funciones propias.
+
+- Algunas de las funciones de egen son:
+  - `rowmean` crea la media de las variables especificadas 
+  - `cut` recodifica la variable con los intervalos especificados con `at`
+  - `rank` ranking de valores
+
+- La sintaxis de `egen` es:  `egen newvar = funcion(argumentos)`
+
+.codefont[
+
+```r
+egen promedio_gasto = rowmean(gasto_salud gasto_educacion gasto_militar)
+
+egen td_rec_2 = cut(tasa_desempleo), at(0, 10, 15) label
+
+egen indice_de_gini_rec = rank(indice_de_gini)
+```
+]
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Explicar las operaciones realizadas en las siguientes dos líneas de código*
+]
+
+
+```r
+gen country_rec = word(country_name, 1)
+replace country_rec = usubinstr(country_rec , ",", "", .)
+```
+
+---
+
+## Recodificar variables
+
+- Con `recode` es posible recodificar los valores de una variable numérica. 
+
+- La sintaxis es:  `recode varlist (rule)`
+
+- Con `/` podemos establecer intervalos, ej `0/5 = 1` implica que todos los valores de 0 a 5 corresponderán a 1.
+
+.codefont[
+
+```r
+recode region (5 = 3) (6 = 1)
+recode region (5 = 3) (6 = 1), gen(region_rec)
+
+recode tasa_desempleo  (0/5 = 1) (5/10 = 2) (10/15 = 3) (15/max = 4), gen(td_rec)
+recode tasa_desempleo (0/5 = 1 Baja) (5/10 = 2 Media) (10/15 = 3 Alta) (15/max = 4 Muy_alta), gen(td_rec_2)
+```
+]
+
+---
+class: inverse, center, middle
+
+# Gráficos
+
+---
+
+## Gráficos
+
+- Stata tiene comandos para realizar distintas [visualizaciones de datos](https://www.stata.com/support/faqs/graphics/gph/stata-graphs/).
+
+- Stata [cheat sheet](https://www.stata.com/links/resources-for-learning-stata/cheat-sheets/StataCheatSheet_visualization_2016_June-REV.pdf) de visualizaciones
+
+- El comando `graph` es la base de las visualizaciones en Stata. Alguno de los tipos que permite son:
+
+&lt;table class="table table-striped table-hover table-condensed" style="font-size: 16px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Comando &lt;/th&gt;
+   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt; Visualización &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; graph twoway &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Gráficos de dispersión, de línea, etc &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; graph bar &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Gráficos de barras &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; graph box &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Gráficos de cajas &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; graph pie &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Gráficos de tortas &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- El comando `hist` sirve para crear histogramas, muy útiles para explorar una base de datos.
+
+---
+
+## Histogramas
+
+
+```r
+# Histograma simple
+hist tasa_desempleo
+```
+
+.center[
+&lt;img src="ima/plot_1.png" width="500px" /&gt;
+]
+
+---
+
+## Histogramas
+
+
+```r
+# Graficar porcentajes en lugar de proporción
+hist tasa_desempleo, percent
+```
+
+.center[
+&lt;img src="ima/plot1_b.png" width="500px" /&gt;
+]
+
+---
+
+## Histogramas
+
+
+```r
+# Agregar título
+hist tasa_desempleo, percent title("Tasa de desempleo en 2018")
+```
+
+.center[
+&lt;img src="ima/plot_2.png" width="500px" /&gt;
+]
+
+---
+
+## Histogramas
+
+
+```r
+hist tasa_desempleo, percent by(region)
+```
+
+.center[
+&lt;img src="ima/plot_3.png" width="500px" /&gt;
+]
+
+
+---
+
+## Gráfico de dispersión
+
+Gráfico de dispersión simple:
+
+
+```r
+graph twoway scatter pib_pc co2_pc
+```
+
+.center[
+&lt;img src="ima/plot_4.png" width="500px" /&gt;
+]
+
+---
+
+## Gráfico de dispersión
+
+No es necesario incluir `graph twoway`
+
+
+```r
+scatter pib_pc co2_pc
+```
+
+.center[
+&lt;img src="ima/plot_4.png" width="500px" /&gt;
+]
+
+---
+
+## Gráfico de dispersión
+
+Agregar etiquetas de variables para los ejes y título: 
+
+
+```r
+label variable pib_pc "PIB per cápita"
+label variable co2_pc "Emisiones de CO2 per cápita"
+scatter pib_pc co2_pc, ///
+ title("Relación entre PIB per cápita y CO2 per cápita")
+```
+
+.center[
+&lt;img src="ima/plot_5.png" width="400px" /&gt;
+]
+
+---
+
+## Gráfico de dispersión
+
+Agregar etiqueta para puntos:
+
+
+```r
+scatter pib_pc co2_pc, ///
+  title("Relación entre PIB per cápita y CO2 per cápita") ///
+ mlabel(country_code)
+```
+
+.center[
+&lt;img src="ima/plot_6.png" width="500px" /&gt;
+]
+
+---
+
+## Gráfico de barras
+
+Media de variable númerica según categoría de otra variable:
+
+
+```r
+graph bar pib_pc, over(region) ///
+ title("Media de PIB per cápita según región") 
+```
+
+.center[
+&lt;img src="ima/plot_7.png" width="500px" /&gt;
+]
+
+
+---
+
+## Gráfico de barras
+
+Barras horizontales para mejorar la visualización:
+
+
+```r
+graph hbar pib_pc, over(region) ///
+ title("Media de PIB per cápita según región") 
+```
+
+.center[
+&lt;img src="ima/plot_8.png" width="500px" /&gt;
+]
+
+---
+
+## Gráfico de barras
+
+Agregar medias, medianas y máxima:
+
+
+```r
+graph hbar (mean) pib_pc (median) pib_pc (max) pib_pc, over(region) ///
+ title("Media de PIB per cápita según región") 
+```
+
+.center[
+&lt;img src="ima/plot_9.png" width="500px" /&gt;
+]
+
+---
+
+## Temas
+
+- Con `scheme` (dentro de las opciones de `graph`) o `set scheme` por cada sesión es posible establecer temas.
+
+
+```r
+graph hbar (mean) pib_pc (median) pib_pc (max) pib_pc, over(region) ///
+ title("Media de PIB per cápita según región") scheme(economist)
+```
+
+.center[
+&lt;img src="ima/plot_10.png" width="400px" /&gt;
+]
+
+---
+
+## Guardar gráficos
+
+Para guardar un gráfico generado en Stata se puede utilizar tanto `graph save` como `graph export`.
+
+La sintaxis es: `graph export newfilename.suffix`.
+
+Ver otros formatos con `help graph export`
+
+
+```r
+# Exportar como gph (formato Stata)
+graph save ejemplo
+
+# Exportar como png
+graph export ejemplo.png
+
+# Exportar como pdf
+graph export ejemplo.pdf
+```
+
+---
+class: inverse, center, middle
+
+# Estadística inferencial
+
+---
+
+## t-test
+
+- Las pruebas t (t-test) independientes están diseñadas para comparar medias de la misma variable entre dos grupos.
+
+- Recodifiquemos la variable de ingreso para que tenga dos categorías, bajos y altos. 
+
+
+```r
+recode income_group (1/2=1 Bajos) (3/4=2 Altos), gen(income_group_2)
+
+ttest co2_pc, by(income_group_2)
+```
+
+.center[
+&lt;img src="ima/ttest.png" width="500px" /&gt;
+]
+
+---
+
+## Modelos de regresión
+
+- Con el comando `regress` o `reg` se pueden estimar regresiones lineales.
+
+- La sintaxis del comando es: `regress depvar [indepvars] [if] [in] [weight] [, options]`
+
+- Las variables categóricas 
+
+
+```r
+reg co2_pc pib_pc i.region
+```
+
+.center[
+&lt;img src="ima/reg.png" width="600px" /&gt;
+]
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
