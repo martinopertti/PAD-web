@@ -4,7 +4,7 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 ## Material del curso
 
 ### Semana 1: Introducción al curso y al análisis de datos
-*Sobre el curso, softwares estadísticos y lenguajes de progrmación, ¿qué es programar?, ¿cómo pensar los datos?
+*Sobre el curso, softwares estadísticos y lenguajes de progrmación, ¿qué es programar?, ¿cómo pensar los datos?*
 - [Presentación](/general/semana-1.html)
 
 ### Semana 2: Introducción a Stata
