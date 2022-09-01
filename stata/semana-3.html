@@ -183,7 +183,7 @@ class: inverse, center, middle
 
 ## Crear nueva variable (expresiones genéricas)
  
-Para crear una nueva variable en Stata se puede utilizar el comando `generate` o `gen`.
+Para crear una nueva variable en Stata se puede utilizar el comando `generate` o su abreviación `gen`.
 
 `generate` crea una nueva variable a partir de una expresión, y tiene la siguiente sintáxis: `generate newvar = exp`.
  
@@ -233,12 +233,16 @@ gen co2 = co2_pc * pob_total
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+
 ---
 
 ## Ejercicio
 
 .content-box-red[
-*Crear una nueva variable de `pib_pc` llamada `pib_pc_2` a partir de otras variables en la base. Chequear que coincidan los valores de `pib_pc` y `pib_pc_2`*
+*1. Crear una nueva variable de `pib_pc` llamada `pib_pc_2` a partir de otras variables en la base. Chequear que coincidan los valores de `pib_pc` y `pib_pc_2`*
+
+*2. Redondear al número entero más cercano la variable co2_pc*
+
 ]
 
 ---
@@ -253,7 +257,7 @@ De esta forma, la creación de la nueva variable se divide en al menos dos líne
 ```r
 gen mercosur = 0 // Primero creo variable con el valor 0 para todos
 replace mercosur = 1 if country_name == "Argentina"  
-replace mercosur = 1  if country_name == "Brasil"  
+replace mercosur = 1 if country_name == "Brasil"  
 replace mercosur = 1 if country_name == "Paraguay"  
 replace mercosur = 1 if country_name == "Uruguay"  
 ```
@@ -262,6 +266,7 @@ replace mercosur = 1 if country_name == "Uruguay"
 
 ## Crear nueva variable (expresiones específicas)
 
+.codefont[
 
 ```r
 gen pob_m3 = 0
@@ -274,7 +279,60 @@ replace td_rec =  1 if tasa_desempleo &lt; 10
 replace td_rec =  2 if tasa_desempleo &gt;= 10 &amp; tasa_desempleo &lt; 15 
 replace td_rec =  3 if tasa_desempleo &gt;= 15
 replace td_rec = . if missing(tasa_desempleo)
+
+gen crec_ele = 0
+replace crec_ele = 1 if pob_crecimiento &gt; 2 &amp; acceso_electricidad &lt; 90
+replace crec_ele = . if missing(pob_crecimiento) | missing(acceso_electricidad)
 ```
+]
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Crear una variable que:*
+
+*- tome el valor 2 si el gasto en educación y en salud es mayor a 6%*
+
+*- tome el valor 1 si el gasto en una de estas dos variables es mayor al 6% pero no en la otra*
+
+*- tome el valor 0 si el gasto en ambas variables es menor a 6%* 
+
+*- sea missing si tenemos valores perdidos en alguna de estas dos variables.*
+]
+
+
+---
+
+## Crear nueva variable (expresiones específicas)
+
+En recodificaciones complejas tener cuidado con el **orden**. Estas líneas de código producen resultados muy diferentes! Vamos de general a particular, es decir, si tenemos dos condiciones y una incluye a la otra, debemos ir por la más general primero (tener más de 6% de gasto en educación o salud) y luego por la particular (tener más de 6% de gasto en ambas). 
+
+Para nuestro ejercicio este código es el correcto:
+
+.codefont[
+
+```r
+gen var_ej = 0
+replace var_ej = 1 if gasto_salud &gt; 6 | gasto_educacion &gt; 6 # general
+replace var_ej = 2 if gasto_salud &gt; 6 &amp; gasto_educacion &gt; 6 # particular
+replace var_ej = . if missing(gasto_salud) | missing(gasto_educacion)
+```
+]
+
+Este es incorrecto:
+
+.codefont[
+
+```r
+gen var_ej = 0
+replace var_ej = 2 if gasto_salud &gt; 6 &amp; gasto_educacion &gt; 6 # particular
+replace var_ej = 1 if gasto_salud &gt; 6 | gasto_educacion &gt; 6 # general
+replace var_ej = . if missing(gasto_salud) | missing(gasto_educacion)
+```
+]
+
 
 ---
 
@@ -313,6 +371,14 @@ egen indice_de_gini_rec = rank(indice_de_gini)
 gen country_rec = word(country_name, 1)
 replace country_rec = usubinstr(country_rec , ",", "", .)
 ```
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Encontrar y utilizar una función del comando egen que nos indique el total de un grupo de variables para cada observación. Aplicar obteniendo el total de las variables que comienzan con gasto_ *
+]
 
 ---
 
@@ -586,6 +652,15 @@ graph export ejemplo.png
 # Exportar como pdf
 graph export ejemplo.pdf
 ```
+
+---
+
+## Ejercicio
+
+.content-box-red[
+*Graficar la relación entre gasto en salud y gasto en educación de la forma que te parezca más conveniente y con la mayor cantidad de información posible*
+]
+
 
 ---
 class: inverse, center, middle

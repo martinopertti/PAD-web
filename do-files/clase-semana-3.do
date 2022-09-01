@@ -39,12 +39,12 @@ tab region // chequeo
 keep if country_name == "Uruguay" | country_name == "Argentina"
 list country_name // chequeo
 
+
 **** Crear variables --------------------------------------------------------
 
 use "data/wb_paises.dta", clear
 
 ** A partir de expresiones genéricas
-
 * Logaritmo de PIB
 generate log_pib = log(pib)
 
@@ -57,6 +57,10 @@ gen area_no_selvatica = area_total - area_selvatica
 * % de área selvatica
 gen area_selvatica_per = (area_selvatica * 100) / area_total
 
+* Porporción
+gen area_selvatica_prop = area_selvatica / area_total
+
+
 ** A partir de valores específicos
 
 * Crear variable nueva a partir de variable de cadena
@@ -65,7 +69,19 @@ replace mercosur = 1 if country_name == "Argentina" // Recodificar cada país
 replace mercosur = 1 if country_name == "Brasil"  
 replace mercosur = 1 if country_name == "Paraguay"  
 replace mercosur = 1 if country_name == "Uruguay"
+
 list country_name if mercosur == 1 // Chequeo
+list country_name mercosur if country_name == "Argentina"
+
+* Cuidado con los missings (países con más de 3 millones de habitantes)
+gen pob_m3 = 0
+replace pob_m3 = 1 if pob_total >= 3000000
+// Qué pasa con Eritrea que no tiene valor para población?
+list country_name pob_total pob_m3 if missing(pob_total)
+replace pob_m3 = . if missing(pob_total) // Si no incluyo esta línea Eritrea, 
+// el país que no tiene datos de población va a quedar codificado como 1 
+// cuando en realidad debe ser missing
+list country_name pob_total pob_m3 if missing(pob_total) // Ahora sí
 
 * Crear variable nueva a parti de variable numérica
 gen td_rec = 0
@@ -74,6 +90,26 @@ replace td_rec =  2 if tasa_desempleo >= 10 & tasa_desempleo < 15
 replace td_rec =  3 if tasa_desempleo >= 15
 replace td_rec = . if missing(tasa_desempleo)
 list country_name tasa_desempleo td_rec if td_rec == 3 // Chequeo
+
+* Crear variable a partir de más de una variable
+* Dummy que indique qué países tienen un crecimiento poblacional mayor al 2% y
+* un acceso a la electricidad menor al 90%
+gen crec_ele = 0
+replace crec_ele = 1 if pob_crecimiento > 2 & acceso_electricidad < 90
+replace crec_ele = . if missing(pob_crecimiento) | missing(acceso_electricidad)
+list country_name crec_ele pob_crecimiento acceso_electricidad  if crec_ele == 1
+
+** Condiciones no excluyentes:
+*Crear una variable que:
+* - tome el valor 2 si el gasto en educación y en salud es mayor a 6%
+* - tome el valor 1 si el gasto en una de estas dos variables es mayor al 6% pero no en la otra
+* - tome el valor 0 si el gasto en ambas variables es menor a 6%
+* - sea missing si tenemos valores perdidos en alguna de estas dos variables.
+gen var_ej = 0
+replace var_ej = 1 if gasto_salud > 6 | gasto_educacion > 6 // general
+replace var_ej = 2 if gasto_salud > 6 & gasto_educacion > 6 // particular
+replace var_ej = . if missing(gasto_salud) | missing(gasto_educacion)
+list country_name var_ej gasto_salud gasto_educacion // Chequeo
 
 ** Utilizando egen 
 egen promedio_gasto = rowmean(gasto_salud gasto_educacion gasto_militar)
