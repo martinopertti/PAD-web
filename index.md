@@ -4,15 +4,18 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 ## Material del curso
 
 ### Semana 1: Introducción al curso y al análisis de datos
+*Sobre el curso, softwares estadísticos y lenguajes de progrmación, ¿qué es programar?, ¿cómo pensar los datos?
 - [Presentación](/general/semana-1.html)
 
-### Semana 2: Introducción a Stata: básicos, importar y exportar datos, estadística y tablas descriptivas
+### Semana 2: Introducción a Stata
+*Comandos básicos, importar y exportar datos, estadística y tablas descriptivas*
 - [Presentación](/stata/semana-2.html)
 - [Código de clase](/do-files/clase-semana-2.do)
 - [Ejercicios](/do-files/ej-semana-2.do)
 - [Solución de ejercicios](/do-files/soluciones-semana-2.do)
 
-### Semana 3: Introducción a Stata II: variables, gráficos y estadística inferencial
+### Semana 3: Introducción a Stata II
+*Limpiar datos, crear y recodificar variables, visualizaciones y estadística inferencial*
 - [Presentación](/stata/semana-3.html)
 - [Código de clase](/do-files/clase-semana-3.do)
 - [Ejercicios](/do-files/ej-semana-3.do)
