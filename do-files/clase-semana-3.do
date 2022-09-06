@@ -10,6 +10,7 @@ cd "C:/Users/marti/Dropbox/cursos/Programación para el análisis de datos/clase
 use "data/wb_paises.dta", clear
 
 
+
 **** Limpiar datos ---------------------------------------------------------
 
 ** Ordenar datos
@@ -148,8 +149,11 @@ list tasa_desempleo td_rec_2
 * Histograma simple
 hist tasa_desempleo
 
-* Histograma con procentaje (en lugar de proporción)
+* Histograma con procentaje (en lugar de densidad)
 hist tasa_desempleo, percent
+
+* Histograma con frecuencia
+hist tasa_desempleo, frequency
 
 * Histograma con título
 hist tasa_desempleo, percent title("Tasa de desempleo en 2018")
