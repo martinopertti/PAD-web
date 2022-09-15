@@ -24,6 +24,11 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 ### Semana 4: Primera evaluación parcial
 
 ### Semana 5: Introducción a R
+*Comandos básicos, interfaz, ayuda y recursos*
+- [Presentación](/stata/semana-5.html)
+- [Código de clase](/scripts/semana_5_codigo.R)
+- [Ejercicios](/scripts/semana_5_ej.R)
+- [Solución de ejercicios](/scripts/semana_5_ej_sol.R)
 
 ### Semana 6: Introducción a R II
 
