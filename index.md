@@ -31,6 +31,11 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Solución de ejercicios](/scripts/semana_5_ej_sol.R)
 
 ### Semana 6: Introducción a R II
+*Dataframes, funciones y paquetes*
+- [Presentación](/r/semana-6.html)
+- [Código de clase](/scripts/semana_6_codigo.R)
+- [Ejercicios](/scripts/semana_6_ej.R)
+- [Solución de ejercicios](/scripts/semana_6_ej_sol.R)
 
 ### Semana 7: Importar y limpiar datos en R
 
