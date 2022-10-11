@@ -38,6 +38,12 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Solución de ejercicios](/scripts/semana_6_ej_sol.R)
 
 ### Semana 7: Importar y limpiar datos en R
+*Importar y exportar datos, dialectos, explorar datos*
+- [Presentación](/r/semana-7.html)
+- [Código de clase](/scripts/semana_7_codigo.R)
+- [Ejercicios](/scripts/semana_7_ej.R)
+- [Solución de ejercicios](/scripts/semana_7_ej_sol.R)
+
 
 ### Semana 8: Estadística descriptiva en R
 
