@@ -27,3 +27,15 @@ glimpse(datauru)
 
 ## 5. Crea una tabla para saber a qué partido político pertenece cada presidente
 table(datauru$presidente, datauru$partido)
+
+## 6. Transformar la variable "partido" a factores y cambiar su orden 
+datauru$partido <- as.factor(datauru$partido)
+levels(datauru$partido)
+table(datauru$partido)
+
+## 7. Cambiar el orden del factor partido por otro que no sea alfabético
+datauru$partido <- fct_relevel(datauru$partido, "Partido Colorado")
+levels(datauru$partido)
+table(datauru$partido)
+
+

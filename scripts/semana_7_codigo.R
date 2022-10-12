@@ -184,7 +184,9 @@ head(d_gap, 3) # Imprime primeras filas (3 en este caso)
 str(d_gap) 
 summary(d_gap) 
 glimpse(d_gap) # Recomiendo utilizar esta función
-
+ncol(d_gap) # Numero de columnas
+nrow(d_gap) # Número de filas
+runif(nrow(datauru), 0, 100) # Utilizar nrow() o ncol() como argumentos
 
 
 # Para obtener una tabla de frecuencias de una variable usamos la función 

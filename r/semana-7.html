@@ -717,7 +717,7 @@ head(data, 5)
 
 ## Etiquetas cuando importamos datos
 
-Si queremos quedarnos directamente coon las etiquetas, podemos utilizar la funcion `as_factor`:
+Si queremos quedarnos directamente con las etiquetas, podemos utilizar la función `as_factor`:
 
 
 ```r
@@ -2648,11 +2648,19 @@ Muchas veces los usamos datos que no están documentados de manera uniforme o ap
 
 .codefont[
 
+```r
+ejemplo
+```
+
 ```
 ##   COLORES NombresCompletos edad_NUMERICA
 ## 1   Verde         María S.            32
 ## 2    Rojo          Juan F.            23
 ## 3    Azul         Pedro A.            24
+```
+
+```r
+janitor::clean_names(ejemplo)
 ```
 
 ```
@@ -2727,6 +2735,22 @@ str(data_gapminder)
 ##  $ lifeExp  : num [1:1704] 28.8 30.3 32 34 36.1 ...
 ##  $ pop      : int [1:1704] 8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...
 ##  $ gdpPercap: num [1:1704] 779 821 853 836 740 ...
+```
+
+```r
+ncol(data_gapminder) # Numero de columnas
+```
+
+```
+## [1] 6
+```
+
+```r
+nrow(data_gapminder) # Numero de filas
+```
+
+```
+## [1] 1704
 ```
 ]
 

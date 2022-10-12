@@ -19,3 +19,7 @@
 ## 4. Usa glimpse() para obtener un resumen de las variables
 
 ## 5. Crea una tabla para saber a qué partido político pertenece cada presidente
+
+## 6. Transformar la variable "partido" a factores y cambiar su orden 
+
+## 7. Cambiar el orden del factor partido por otro que no sea alfabético
