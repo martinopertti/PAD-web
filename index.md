@@ -44,8 +44,12 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Ejercicios](/scripts/semana_7_ej.R)
 - [Solución de ejercicios](/scripts/semana_7_ej_sol.R)
 
-
-### Semana 8: Estadística descriptiva en R
+### Semana 8: Estadística descriptiva y recodificación de variables en R
+*Estadística descriptiva y recodificación de variables*
+- [Presentación](/r/semana-8.html)
+- [Código de clase](/scripts/semana_8_codigo.R)
+- [Ejercicios](/scripts/semana_8_ej.R)
+- [Solución de ejercicios](/scripts/semana_8_ej_sol.R)
 
 ### Semana 9: Manipulación de datos en R II
 
