@@ -197,7 +197,7 @@ table(data_gapminder$continent, data_gapminder$lifeExp_quant)
 
 *(1) Importar la base wb_paises*
 
-*(2) Calcular la media, mediana, desvío estandar y moda de la variable aceso_electrico*
+*(2) Calcular la media, mediana, desvío estandar y moda de la variable acceso_electricidad*
 
 *(3) Crear un gráfico de dispersión de las variables de PBI per capita y CO2 per capita*
 
@@ -446,7 +446,7 @@ class: inverse, center, middle
 
 ## Recodificación condicional con case_when() y mutate()
 
-Cuando trabajmos con dataframes `case_when()` debemos trabajar también con `mutate()` (la primera se usa dentro de la segunda). `case_when()` testea condiciones en orden (esto es importante cuando pasamos condiciones no excluyentes). `case_when()` lista condiciones para las que asigna un valor en caso de que sean verdaderas, y permite pasar múltiples condiciones. `TRUE` refiere a las condiciones no listadas. La estructura de `case_when()` es: 
+Cuando trabajmos con `case_when()` debemos trabajar también con `mutate()` (la primera se usa dentro de la segunda). `case_when()` testea condiciones en orden (esto es importante cuando pasamos condiciones no excluyentes). `case_when()` lista condiciones para las que asigna un valor en caso de que sean verdaderas, y permite pasar múltiples condiciones. `TRUE` refiere a las condiciones no listadas. La estructura de `case_when()` es: 
 
 
 
@@ -593,12 +593,39 @@ table(d_gap$year)
 ##  142  142  142  142  142  142  142  142  142  142  142  142
 ```
 
+---
+
+## Recodificación con condiciones no excluyentes
+
+A veces queremos recodificar una variable con condiciones que no son excluyentes, sino que se engloban. En estos casos como `case_when()` testea las condiciones en orden, debemos ir desde la condición particular a la general.
+
+Supongamos que queremos tener una variable con 3 posibles categorías: que sea un país europeo con expectativa de vida mayor a 75 años ("E75"), que sea un país con expectativa de vida mayor a 75 años ("75") y el resto.
+
+
+
+```r
+d_gap &lt;- mutate(d_gap, 
+                exp_ue = case_when(
+                  lifeExp &gt; 75 &amp; continent == "Europe" ~ "E75",
+                  lifeExp &gt; 75 ~ "75",
+                  TRUE ~ "Resto"))
+table(d_gap$exp_ue)
+```
+
+```
+## 
+##    75   E75 Resto 
+##    72   101  1531
+```
+
 
 ---
 
 ## Recodificación condicional con case_when() y mutate()
 
- Aplicando la misma lógica  cambiemos solamente en la variable continente "Americas" por "Las Américas" y "Europe" por "Europa". ¿Por qué nos da error?
+ Aplicando la misma lógica  cambiemos solamente en la variable continente "Americas" por "Las Américas" y "Europe" por "Europa".
+ 
+ ¿Por qué nos da error?
 
 .codefont[
 
@@ -944,26 +971,69 @@ print(encuesta_anexada)
 
 ## Datos perdidos en R
 
+Con `complete.cases()`  vemos que filas están completas:
+
+.codefont[
 
 ```r
-# Con complete.cases vemos que filas están completas
 complete.cases(encuesta_anexada)
 ```
 
 ```
 ## [1] FALSE FALSE FALSE  TRUE  TRUE FALSE
 ```
+]
+
+Con `drop_na()` de dplyr eliminamos las observaciones con datos perdidos en al menos una variable
+
+.codefont[
 
 ```r
-# Con na.omit nos eliminamos las observaciones con datos perdidos
-na.omit(encuesta_anexada)
+drop_na(encuesta_anexada)
 ```
 
 ```
 ##   edad ideologia      voto genero
+## 1   40   Derecha Partido B  Mujer
+## 2   44 Izquierda Partido A Hombre
+```
+]
+
+También con `drop_na()` podemos eliminar casos con datos perdidos en una variable específica
+
+.codefont[
+
+```r
+drop_na(encuesta_anexada, edad)
+```
+
+```
+##   edad ideologia      voto genero
+## 1   18 Izquierda Partido A   &lt;NA&gt;
+## 2   24 Izquierda Partido A   &lt;NA&gt;
+## 3   80   Derecha Partido C   &lt;NA&gt;
 ## 4   40   Derecha Partido B  Mujer
 ## 5   44 Izquierda Partido A Hombre
 ```
+]
+
+---
+
+## Recodificar variables con datos perdidos
+
+
+```r
+encuesta_anexada &lt;- encuesta_anexada %&gt;% 
+  mutate(gen_rec = case_when(
+    is.na(genero) ~ "No hay datos",
+    TRUE ~ genero
+  ))
+```
+
+
+
+
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

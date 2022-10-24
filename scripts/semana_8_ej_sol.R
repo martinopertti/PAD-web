@@ -81,7 +81,7 @@ any(is.na(datauru$aprobacion))
 which(is.na(datauru$aprobacion)) # Los primeros 5
 
 ## 14. Crear un nuevo dataframe solo con las observaciones sin ningún NA
-datauru_complete <- na.omit(datauru)
+datauru_complete <- drop_na(datauru)
 
 
 

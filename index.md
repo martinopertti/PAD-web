@@ -52,6 +52,11 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Solución de ejercicios](/scripts/semana_8_ej_sol.R)
 
 ### Semana 9: Manipulación de datos en R II
+*Filtrar, seleccionar, modificar datos y crear resumenes y tablas descriptivas*
+- [Presentación](/r/semana-9.html)
+- [Código de clase](/scripts/semana_9_codigo.R)
+- [Ejercicios](/scripts/semana_9_ej.R)
+- [Solución de ejercicios](/scripts/semana_9_ej_sol.R)
 
 ### Semana 10: Manipulación de datos en R II
 

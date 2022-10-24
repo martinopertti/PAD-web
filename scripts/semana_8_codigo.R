@@ -9,11 +9,16 @@
 
 ## 1. Estadisticos descriptivos =============================================
 
+library(tidyverse)
+library(gapminder)
+
+d_gap <- gapminder
+
 # R cuenta también con funciones para obtener estadísticos descriptivos
-mean(d_gap$lifeExp) # Media
+mi_media <- mean(d_gap$lifeExp, na.rm = TRUE) # Media
 median(d_gap$lifeExp) # Mediana
 sd(d_gap$lifeExp) # Desvío estandar
-range(d_gap$lifeExp) # Rango
+mi_rango <- range(d_gap$lifeExp) # Rango
 max(d_gap$lifeExp) # Minimo
 min(d_gap$lifeExp) # Maximo
 
@@ -25,8 +30,8 @@ hist(d_gap$lifeExp,
 plot(d_gap$lifeExp, d_gap$gdpPercap,
      main = "Relación entre expectativa de vida y PBI per cápita")
 
-quantile(d_gap$lifeExp, probs=c(0.2, 0.4, 0.8)) # Cuantiles
-quantile(d_gap$lifeExp, probs=seq(0, 1, 0.2)) # Cuantiles
+quantile(d_gap$lifeExp, probs = c(0.2, 0.4, 0.8)) # Cuantiles
+quantile(d_gap$lifeExp, probs = seq(0, 1, 0.2)) # Cuantiles
 
 # Con la función ntile() de dplyr podemos asignar quintiles en una variable
 d_gap$lifeExp_quant <- ntile(d_gap$lifeExp, 5)
@@ -53,7 +58,7 @@ head(d_gap, 3)
 # También podemos crear ambas variables dentro de la misma línea 
 d_gap <- gapminder
 d_gap <- mutate(d_gap, 
-                var1 = "Valor fijo",
+var1 = "Valor fijo",
                 var2 = 7)
 head(d_gap, 3)
 
@@ -78,10 +83,12 @@ head(d_gap, 3)
 # Primero nos quedamos con los datos de Uruguay
 data_uru <- filter(gapminder, country == "Uruguay") 
 data_uru <- mutate(data_uru, gdpPercap_lag = lag(gdpPercap, n=1))
+data_uru <- mutate(data_uru, gdpPercap_lead = lead(gdpPercap, n=1))
 head(data_uru, 3)
 
 ## Rankings e identificadores
 d_gap <- mutate(gapminder, id = row_number()) # Identificador (números consecutivos)
+
 head(d_gap, 3)
 d_gap <- mutate(d_gap, gdp_rank = row_number(gdpPercap)) # Ranking según variable
 d_gap <- arrange(d_gap, desc(gdp_rank)) # Ordeno los datos según el ranking
@@ -119,11 +126,15 @@ rm(list=ls())
 d_gap <- gapminder
 
 # Creemos una variable que indique si el país es Uruguay o no
-d_gap <- mutate(d_gap, uruono = case_when(
-  country == "Uruguay" ~ "Si",
-  TRUE ~ "No")
-)
+d_gap <- mutate(d_gap, 
+                uruono = case_when(
+                  country == "Uruguay" ~ "Si")
+                )
+
+
+
 table(d_gap$uruono)
+table(d_gap$uruono_2)
 
 ## Con case_when() podemos establecer varias condiciones fácilmente
 d_gap <- mutate(d_gap, mercosur = case_when(country == "Uruguay" ~ 1,
@@ -133,15 +144,16 @@ d_gap <- mutate(d_gap, mercosur = case_when(country == "Uruguay" ~ 1,
                                             TRUE ~ 0))
 table(d_gap$mercosur)
 
+paises_mercosur <- c("Argentina", "Paraguay", "Brazil", "Uruguay")
+
 # También podemos usar operadores para simplificar
 d_gap <- mutate(d_gap, mercosur_2 = case_when(
   country %in% c("Argentina", "Paraguay", "Brazil", "Uruguay") ~ 1,
   TRUE ~ 0)
-) 
+  ) 
 
 d_gap <- mutate(d_gap, mercosur_3 = case_when(
-  country == "Argentina" | country == "Paraguay" | 
-    country == "Brazil" | country == "Uruguay" ~ 1,
+  country == "Argentina" | country == "Paraguay" | country == "Brazil" | country == "Uruguay" ~ 1,
   TRUE ~ 0)
 )
 
@@ -221,5 +233,12 @@ print(encuesta_anexada)
 # Con complete.cases vemos que filas están completas
 complete.cases(encuesta_anexada)
 
-# Con na.omit nos eliminamos las observaciones con datos perdidos
-na.omit(encuesta_anexada)
+# Con drop_na() de dplyr eliminamos las observaciones con datos perdidos en al menos una variable
+drop_na(encuesta_anexada)
+
+# También con drop_na() podemos eliminar casos con datos perdidos en una variable específica
+drop_na(encuesta_anexada, edad)
+
+
+
+
