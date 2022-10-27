@@ -31,8 +31,10 @@
 ## 4. Extraer la suma de puntos de los 10 partidos con mayor antoación (total, 
 # suma de ambos equipos) en la temporada
 
+## 5. Crear una tabla con frecuencia simple y porcentaje de partidos que ganaron
+# los equipos locales
 
-## 5. Utilizando la lista de equipos debajo, filtrar  los partidos en los que
+## 6. Utilizando la lista de equipos debajo, filtrar  los partidos en los que
 # estos equipos jugaron de local (El operador %in% puede serte útil). Luego, en
 # el mismo pipeline  calcular el desvío estandar de los puntos anotados por 
 # cada equipo 
@@ -41,7 +43,7 @@ equipos <- c("Boston Celtics", "Milwaukee Bucks",
              "New York Knicks", "Atlanta Hawks")
 
 
-## 6. Calcular en una tabla el máximo y mínimo de puntos según equipo (jugando 
+## 7. Calcular en una tabla el máximo y mínimo de puntos según equipo (jugando 
 # como local) y según resultado. Es decir, la tabla debe tener cuatro valores 
 # por equipo: máximo de puntos en partidos ganados, máximo de puntos en partidos
 # perdidos, mínimo de puntos en partidos ganados y máximo de puntos en partidos

@@ -117,9 +117,10 @@ El paquete dplyr contiene funciones muy útiles para la transformación de dataf
 
 - `filter()`: filtrar observaciones en base a valores
 - `select()`: filtrar variables 
-- `mutate()`: crear o recodificar variables
-- `summarise()`: colapsa valores según alguna fórmula (sumar, número de casos, media, etc.)
+- `rename()`: renombrar variables
 - `arrange()`: ordena los valores según variables
+- `distinct()`: extraer valores únicos
+- `summarise()`: colapsa valores según alguna fórmula (sumar, número de casos, media, etc.)
 - `group_by()`: define grupos de valores utilizar las otras funciones
 
 ---
@@ -571,7 +572,7 @@ nba_data %&gt;%
 ## Ejercicio 
 
 .content-box-blue[
-*Utilizando la base nba_data, crear un dataframe que contenga 3 variables: puntos, asistencias y rebotes (con esos nombres) de todos los partidos de local de los Dallas Mavericks en la temporada 2011. Usar el pipeline*
+*Utilizando la base nba_data, crear un dataframe que contenga 3 variables: puntos, asistencias y rebotes (con esos nombres) de todos los partidos de local de los Dallas Mavericks en la temporada 2011, ordenar de forma descendentepor la cantidad de puntos y extraer los 5 partidos con más puntos. Usar el pipeline*
 ]
 
 ---
@@ -584,7 +585,7 @@ class: inverse, center, middle
 
 Resumir datos o crear tablas descriptivas es una de las partes fundamentales del análisis de datos. Para ello utilizaremos la función `summarise()`, muchas veces en conjunto con `group_by()`. 
 
-Escencialmente `summarise()` resume un dataframe en una fila según una estadística especificada. Por ejemplo, calculando la media de una variable
+Esencialmente `summarise()` resume un dataframe en una fila según una estadística especificada. Por ejemplo, calculando la media de una variable
 
 .codefont[
 
@@ -610,19 +611,6 @@ mean(nba_data$pts_home, na.rm = TRUE)
 ## [1] 102.2834
 ```
 ]
-
----
-## Resumir datos 
-
-Algunas de las operaciones más utilizadas para resumir datos:
-
-- `mean()`: media 
-- `median()`: mediana
-- `sd()`: desvío estandar
-- `sum()`: suma
-- `n()`: número de observaciones
-- `n_distinct()`: número de valores únicos
-- `min()` y `max()`: mínimo y máximo
 
 ---
 ## Resumir datos 
@@ -654,6 +642,20 @@ nba_data %&gt;%
 ]
 
 ---
+## Resumir datos 
+
+Algunas de las operaciones más utilizadas para resumir datos:
+
+- `mean()`: media 
+- `median()`: mediana
+- `sd()`: desvío estandar
+- `sum()`: suma
+- `n()`: número de observaciones
+- `n_distinct()`: número de valores únicos
+- `min()` y `max()`: mínimo y máximo
+
+
+---
 ## Resumir datos
 
 Siempre debemos especificar los grupos con `group_by()` antes de utilizar `summarise()`. Si queremos seguir realizando operaciones luego de `summarise()`, y no queremos que estas operaciones estén agrupadas utilizamos `ungroup()`.
@@ -683,6 +685,160 @@ nba_data %&gt;%
 ##  8   2018 112. 
 ##  9   2019 112. 
 ## 10   2020 110.
+```
+]
+
+---
+## Resumir datos
+
+Para obtener una tabla de frecuencias utilizando este enfoque utilizamos dentro de `summarise()` la función `n()`. También podemos utilizar el equivalente (y más corto) `count()`
+
+.codefont[
+
+```r
+nba_data %&gt;% 
+  group_by(season) %&gt;% 
+  summarise(temporadas = n()) # No lleva argumento
+```
+
+```
+## # A tibble: 18 x 2
+##    season temporadas
+##     &lt;dbl&gt;      &lt;int&gt;
+##  1   2003       1385
+##  2   2004       1362
+##  3   2005       1432
+##  4   2006       1419
+##  5   2007       1411
+##  6   2008       1425
+##  7   2009       1424
+##  8   2010       1422
+##  9   2011       1104
+## 10   2012       1420
+## 11   2013       1427
+## 12   2014       1418
+## 13   2015       1416
+## 14   2016       1405
+## 15   2017       1382
+## 16   2018       1378
+## 17   2019       1241
+## 18   2020         49
+```
+]
+
+---
+## Resumir datos
+
+Para obtener lo mismo que con `summarise()` y `n()` podemos utilizar el equivalente (y más corto) `count()`
+
+.codefont[
+
+```r
+count(nba_data, season)
+```
+
+```
+## # A tibble: 18 x 2
+##    season     n
+##     &lt;dbl&gt; &lt;int&gt;
+##  1   2003  1385
+##  2   2004  1362
+##  3   2005  1432
+##  4   2006  1419
+##  5   2007  1411
+##  6   2008  1425
+##  7   2009  1424
+##  8   2010  1422
+##  9   2011  1104
+## 10   2012  1420
+## 11   2013  1427
+## 12   2014  1418
+## 13   2015  1416
+## 14   2016  1405
+## 15   2017  1382
+## 16   2018  1378
+## 17   2019  1241
+## 18   2020    49
+```
+]
+
+
+
+---
+## Resumir datos
+
+Si queremos calcular la proporción o el porcentaje debemos transformar la frecuencia en porcentaje creando una nueva variable con `mutate()`
+
+.codefont[
+
+```r
+nba_data %&gt;% 
+  group_by(season) %&gt;% 
+  summarise(temporadas = n()) %&gt;% 
+  mutate(porcentaje = temporadas / sum(temporadas))
+```
+
+```
+## # A tibble: 18 x 3
+##    season temporadas porcentaje
+##     &lt;dbl&gt;      &lt;int&gt;      &lt;dbl&gt;
+##  1   2003       1385    0.0589 
+##  2   2004       1362    0.0579 
+##  3   2005       1432    0.0609 
+##  4   2006       1419    0.0603 
+##  5   2007       1411    0.0600 
+##  6   2008       1425    0.0606 
+##  7   2009       1424    0.0605 
+##  8   2010       1422    0.0605 
+##  9   2011       1104    0.0469 
+## 10   2012       1420    0.0604 
+## 11   2013       1427    0.0607 
+## 12   2014       1418    0.0603 
+## 13   2015       1416    0.0602 
+## 14   2016       1405    0.0597 
+## 15   2017       1382    0.0588 
+## 16   2018       1378    0.0586 
+## 17   2019       1241    0.0528 
+## 18   2020         49    0.00208
+```
+]
+
+---
+## Resumir datos
+
+Para emprolijar la tabla:
+
+.codefont[
+
+```r
+nba_data %&gt;% 
+  group_by(season) %&gt;% 
+  summarise(temporadas = n()) %&gt;% 
+  mutate(porcentaje = round((temporadas / sum(temporadas))*100, digits = 1))
+```
+
+```
+## # A tibble: 18 x 3
+##    season temporadas porcentaje
+##     &lt;dbl&gt;      &lt;int&gt;      &lt;dbl&gt;
+##  1   2003       1385        5.9
+##  2   2004       1362        5.8
+##  3   2005       1432        6.1
+##  4   2006       1419        6  
+##  5   2007       1411        6  
+##  6   2008       1425        6.1
+##  7   2009       1424        6.1
+##  8   2010       1422        6  
+##  9   2011       1104        4.7
+## 10   2012       1420        6  
+## 11   2013       1427        6.1
+## 12   2014       1418        6  
+## 13   2015       1416        6  
+## 14   2016       1405        6  
+## 15   2017       1382        5.9
+## 16   2018       1378        5.9
+## 17   2019       1241        5.3
+## 18   2020         49        0.2
 ```
 ]
 

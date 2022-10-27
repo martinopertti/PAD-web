@@ -195,6 +195,27 @@ pts_per_season <- nba_data %>%
   group_by(season) %>% 
   summarise(media = mean(pts_home))
 
+## Resumen con frecuencia simple
+nba_data %>% 
+  group_by(season) %>% 
+  summarise(temporadas = n()) # No lleva argumento
+
+## Es lo mismo con count()
+count(nba_data, season)
+
+## Pasar a proporción
+nba_data %>% 
+  group_by(season) %>% 
+  summarise(temporadas = n()) %>% 
+  mutate(porcentaje = temporadas / sum(temporadas))
+
+## Pasar a porcentaje formateado
+nba_data %>% 
+  group_by(season) %>% 
+  summarise(temporadas = n()) %>% 
+  mutate(porcentaje = round((temporadas / sum(temporadas))*100, digits = 1))
+
+
 ## Con ungroup() dejamos de agrupar para las funciones que aún no han corrido,
 # Con la lógica del pipeline podemos luego seguir transformado el resumen, 
 # por ejemplo quedarnos con las temporadas posteriores a 2010
