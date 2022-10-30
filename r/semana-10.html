@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Manipulacíon de datos en R II</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Manipulacíon de datos en R II
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+
+# Unir bases de datos
+
+---
+## Unir dataframes 
+
+dplyr cuenta con dos funciones para combinar dataframes: `bind_rows()` y `bind_cols()`.
+
+.center[
+&lt;img src="ima/bind.jpg" width="600px" /&gt;
+]
+
+.right[[Surles (2017)](https://rpubs.com/williamsurles/293454)]
+
+---
+## Unir dataframes por columna
+
+Cuando tenemos dos dataframes con las mismas variables podemos usar `bind_rows()`. También se puede utilizar `rbind()` del R Base.
+
+
+
+
+```r
+nba_data &lt;- read_csv("data/nba_data.csv") %&gt;% 
+  janitor::clean_names()
+```
+
+
+
+```r
+# Dividamos el dataframe en 2 para volver a unirlo
+nba_data_18 &lt;- filter(nba_data, season == 2018)
+nba_data_17 &lt;- filter(nba_data, season == 2017)
+
+nba_data_17_18 &lt;- bind_rows(nba_data_17, nba_data_18)
+
+table(nba_data_17_18$season)
+```
+
+```
+## 
+## 2017 2018 
+## 1382 1378
+```
+
+---
+## Unir dataframes por columna
+
+Si  las columnas de los dataframes que queremos unir no son exactamente iguales, con `bind_rows()` se generan columnas con datos perdidos, mientras que con `rbind()` da error.
+
+.codefont[
+
+```r
+# Solo 2018
+nba_data_18 &lt;- filter(nba_data, season == 2018) %&gt;% 
+  select(season, game_date_est)
+
+# Solo 2017 y dos variables
+nba_data_17 &lt;- nba_data %&gt;% 
+  filter(season == 2017) %&gt;% 
+  select(season, pts_home)
+
+colnames(nba_data_17)
+```
+
+```
+## [1] "season"   "pts_home"
+```
+
+```r
+nba_data_17_18 &lt;- bind_rows(nba_data_17, nba_data_18)
+head(nba_data_17_18, 3)
+```
+
+```
+## # A tibble: 3 x 3
+##   season pts_home game_date_est
+##    &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;       
+## 1   2017       85 NA           
+## 2   2017      102 NA           
+## 3   2017      122 NA
+```
+]
+
+---
+## Unir dataframes por fila
+
+Cuando tenemos dos dataframes con las mismas observaciones pero distintas variables podemos utilizar `bind_cols()` para unirlos. También se puede utilizar `cbind()` del R Base.
+
+
+```r
+# Dividamos el dataframe en 2 para volver a unirlo
+nba_data_a &lt;- nba_data %&gt;% 
+  select(game_date_est, fg3_pct_home)
+
+nba_data_b &lt;- nba_data %&gt;% 
+  select(ast_home, home_team_wins)
+
+nba_data_C &lt;- bind_cols(nba_data_a, nba_data_b)
+
+colnames(nba_data_C)
+```
+
+```
+## [1] "game_date_est"  "fg3_pct_home"   "ast_home"       "home_team_wins"
+```
+
+---
+class: inverse, center, middle
+
+# Joins
+
+---
+## Joins
+
+- Cuando trabajamos con datos muchas veces debemos utilizar más de un conjunto de datos. Ya vimos que para combinar datos con las mismas columnas o las mismas filas usamos `bind_cols()` o  `bind_rows()`.
+
+- Para combinar datos con distintas estructuras podemos utilizar las funciones `*_join()` de dplyr. 
+
+- Para llevar a cabo estas operaciones necesitamos al menos una variable que identifique los casos en ambos dataframes (pueden llamarse de distinta forma). Estas variables se denominan key variables.
+
+---
+## Joins (ejemplo)
+
+Un ejemplo: La NBA se divide en dos conferencias: este y oeste. Supongamos que queremos averiguar los equipos de cuál conferencia ganaron más partidos en los últimos 10 años. Filtrando el dataframe `nba_data` podemos conseguir fácilmente el resultado de todos los partidos en los últimos 10 años:
+
+.codefont[
+
+```r
+nba_u10 &lt;- nba_data %&gt;% 
+  filter(season &gt; 2010) %&gt;% 
+  select(home_team, visitor_team, pts_home, pts_away)
+
+dim(nba_u10)
+```
+
+```
+## [1] 12240     4
+```
+
+```r
+head(nba_u10, 5)
+```
+
+```
+## # A tibble: 5 x 4
+##   home_team          visitor_team       pts_home pts_away
+##   &lt;chr&gt;              &lt;chr&gt;                 &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Orlando Magic      Charlotte Hornets       120      117
+## 2 Washington Wizards Detroit Pistons          99       96
+## 3 Memphis Grizzlies  Atlanta Hawks           116      117
+## 4 Indiana Pacers     Philadelphia 76ers      107      113
+## 5 Toronto Raptors    Miami Heat              105      117
+```
+]
+
+---
+## Joins (ejemplo)
+
+El problema es que `nba_data` no tiene una variable que identifique la conferencia de cada equipo. Pero esa información está disponible en el dataframe `nba_teams`
+
+
+```r
+nba_teams &lt;- read_csv(here::here("data/nba_teams.csv")) %&gt;% 
+  janitor::clean_names()
+
+nba_teams &lt;- nba_teams %&gt;% 
+  select(city, nickname, conference)
+
+glimpse(nba_teams)
+```
+
+```
+## Rows: 30
+## Columns: 3
+## $ city       &lt;chr&gt; "Atlanta", "Boston", "New Orleans", "Chicago", "Dallas", "D~
+## $ nickname   &lt;chr&gt; "Hawks", "Celtics", "Pelicans", "Bulls", "Mavericks", "Nugg~
+## $ conference &lt;chr&gt; "east", "east", "west", "east", "west", "west", "west", "we~
+```
+
+---
+## Joins (ejemplo)
+
+De esta forma, queremos incorporar datos de un dataframe a nivel equipo de 30 observaciones a nuestra data por partido de 12240. La variable "key" es el equipo.
+
+El primer paso antes de realizar un join es chequear que las variables identificadoras coincidan. Una primer mirada a nuestros dataframes nos indica que este no es nuestro caso: en `nba_data` las variables `home_team` y `visitor_team` los equipos están definidos por ciudad y nombre (Chicago Bulls, por ej.) mientras que en `nba_teams` están dividos en dos variables `city` y `nickname`. 
+
+.codefontchico[
+
+```r
+pull(distinct(nba_teams, nickname))
+```
+
+```
+##  [1] "Hawks"         "Celtics"       "Pelicans"      "Bulls"        
+##  [5] "Mavericks"     "Nuggets"       "Rockets"       "Clippers"     
+##  [9] "Lakers"        "Heat"          "Bucks"         "Timberwolves" 
+## [13] "Nets"          "Knicks"        "Magic"         "Pacers"       
+## [17] "76ers"         "Suns"          "Trail Blazers" "Kings"        
+## [21] "Spurs"         "Thunder"       "Raptors"       "Jazz"         
+## [25] "Grizzlies"     "Wizards"       "Pistons"       "Hornets"      
+## [29] "Cavaliers"     "Warriors"
+```
+
+```r
+pull(distinct(nba_teams, city))
+```
+
+```
+##  [1] "Atlanta"       "Boston"        "New Orleans"   "Chicago"      
+##  [5] "Dallas"        "Denver"        "Houston"       "Los Angeles"  
+##  [9] "Miami"         "Milwaukee"     "Minnesota"     "Brooklyn"     
+## [13] "New York"      "Orlando"       "Indiana"       "Philadelphia" 
+## [17] "Phoenix"       "Portland"      "Sacramento"    "San Antonio"  
+## [21] "Oklahoma City" "Toronto"       "Utah"          "Memphis"      
+## [25] "Washington"    "Detroit"       "Charlotte"     "Cleveland"    
+## [29] "Golden State"
+```
+]
+
+---
+## Joins (ejemplo)
+
+El primero paso entonces es unificar las categorías de las variables identificadoras.
+
+.codefont[
+
+```r
+nba_teams &lt;- nba_teams %&gt;% 
+  mutate(team = paste(city, nickname)) %&gt;% # Concateno ciudad y nombre
+  select(team, conference)
+pull(distinct(nba_teams, team))
+```
+
+```
+##  [1] "Atlanta Hawks"          "Boston Celtics"         "New Orleans Pelicans"  
+##  [4] "Chicago Bulls"          "Dallas Mavericks"       "Denver Nuggets"        
+##  [7] "Houston Rockets"        "Los Angeles Clippers"   "Los Angeles Lakers"    
+## [10] "Miami Heat"             "Milwaukee Bucks"        "Minnesota Timberwolves"
+## [13] "Brooklyn Nets"          "New York Knicks"        "Orlando Magic"         
+## [16] "Indiana Pacers"         "Philadelphia 76ers"     "Phoenix Suns"          
+## [19] "Portland Trail Blazers" "Sacramento Kings"       "San Antonio Spurs"     
+## [22] "Oklahoma City Thunder"  "Toronto Raptors"        "Utah Jazz"             
+## [25] "Memphis Grizzlies"      "Washington Wizards"     "Detroit Pistons"       
+## [28] "Charlotte Hornets"      "Cleveland Cavaliers"    "Golden State Warriors"
+```
+]
+
+---
+## Joins (ejemplo)
+
+Nuestros dataframes a combinar
+
+.codefont[
+
+```r
+glimpse(nba_teams)
+```
+
+```
+## Rows: 30
+## Columns: 2
+## $ team       &lt;chr&gt; "Atlanta Hawks", "Boston Celtics", "New Orleans Pelicans", ~
+## $ conference &lt;chr&gt; "east", "east", "west", "east", "west", "west", "west", "we~
+```
+]
+
+.codefont[
+
+```r
+glimpse(nba_u10)
+```
+
+```
+## Rows: 12,240
+## Columns: 4
+## $ home_team    &lt;chr&gt; "Orlando Magic", "Washington Wizards", "Memphis Grizzlies~
+## $ visitor_team &lt;chr&gt; "Charlotte Hornets", "Detroit Pistons", "Atlanta Hawks", ~
+## $ pts_home     &lt;dbl&gt; 120, 99, 116, 107, 105, 119, 89, 127, 103, 129, 113, 115,~
+## $ pts_away     &lt;dbl&gt; 117, 96, 117, 113, 117, 83, 113, 113, 105, 96, 114, 123, ~
+```
+]
+
+---
+## Joins 
+
+Ahora que tenemos los dos dataframes y que la variable identificadora tiene las mismas categorías, ¿cómo las unimos?
+
+- dplyr tiene seis tipos de joins. Cuatro de ellos son [mutate](https://dplyr.tidyverse.org/reference/mutate-joins.html) joins y dos son [filter](https://dplyr.tidyverse.org/reference/filter-joins.html) joins. 
+
+- Todos los joins tienen tres argumentos principales:
+
+    - `x`: dataframe 1 
+    - `y`: dataframe 2 
+    - `by`: especificar variable identificadora 
+
+- Los cuatro tipos de mutate joins son:
+
+    - `left_join()`: une incluyendo todas las filas en x
+    - `right_join()`: une incluyendo todas las filas en y
+    - `inner_join()`: une incluyendo todas las filas en x &amp; y
+    - `full_join()`: une incluyendo todas las filas en x o y
+
+---
+## Joins
+
+.center[
+&lt;img src="ima/joins.png" width="500px" /&gt;
+]
+
+.right[[Wichkham &amp; Grolemund (2018)](https://r4ds.had.co.nz/relational-data.html)]
+
+---
+## Joins
+
+.center[
+&lt;img src="ima/full_join.png" width="500px" /&gt;
+]
+
+.center[
+&lt;img src="ima/inner_join.png" width="500px" /&gt;
+]
+
+.right[[Wichkham &amp; Grolemund (2018)](https://r4ds.had.co.nz/relational-data.html)]
+
+
+---
+## Joins (ejemplo)
+
+.codefont[
+
+```r
+## Selecciono variable con nombre de equipo y conferencia
+nba_teams_rec &lt;- nba_teams %&gt;% 
+  select(team, conference)
+
+## Uno ambos dataframes usando left_join()
+# Manera tradicional
+nba_full &lt;- left_join(x = nba_u10,
+                      y = nba_teams_rec,
+                      by = c("home_team" = "team"))
+# Con pipeline
+nba_full &lt;- nba_u10 %&gt;% 
+  left_join(nba_teams_rec, by = c("home_team" = "team"))
+
+nba_full
+```
+
+```
+## # A tibble: 12,240 x 5
+##    home_team             visitor_team           pts_home pts_away conference
+##    &lt;chr&gt;                 &lt;chr&gt;                     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;     
+##  1 Orlando Magic         Charlotte Hornets           120      117 east      
+##  2 Washington Wizards    Detroit Pistons              99       96 east      
+##  3 Memphis Grizzlies     Atlanta Hawks               116      117 west      
+##  4 Indiana Pacers        Philadelphia 76ers          107      113 east      
+##  5 Toronto Raptors       Miami Heat                  105      117 east      
+##  6 New York Knicks       Cleveland Cavaliers         119       83 east      
+##  7 Boston Celtics        Brooklyn Nets                89      113 east      
+##  8 New Orleans Pelicans  Milwaukee Bucks             127      113 west      
+##  9 Oklahoma City Thunder Chicago Bulls               103      105 west      
+## 10 Denver Nuggets        Portland Trail Blazers      129       96 west      
+## # ... with 12,230 more rows
+```
+]
+
+---
+## Joins
+
+- Tanto `left_join()` como `right_join()` funcionan de la misma manera: mantienen el número de filas de uno de los dataframes. En `left_join()` se mantiene el número de observaciones de `x` mientras que en `right_join()` de `y`. Esto significa que: `left_join(data1, data2)` = `right_join(data2, data1)`. Usando `left_join()` en caso de que `y` no tenga datos sobre algun valor de la variable identificadora de `x`, se devolverá `NA`, pero no se borrará la observación
+
+- `full_join()`mantiene todas las observaciones tanto de `x` como de `y`
+
+- `inner_join()` mantiene las observaciones presentes en `x` e `y`. Descarta las observaciones presentes en `x` pero ausentes en `y`, y las observaciones presentes en `y` ausentes en `x`.
+
+---
+class: inverse, center, middle
+
+# Estructura de datos
+
+---
+## Estructura de datos
+
+Un mismo conjunto de datos puede ser estructurado de distintas formas. Los criterios para ellos pueden ir desde facilitar la entrada de datos, a utilizar el formato correcto para correr ciertas funciones. 
+
+En el marco del Tidyverse se estructuran los datos en formato "tidy". Esto no significa que siempre que utilicemos R tengamos que estructurar los datos de esta forma, algunas funciones pueden requerir otros formatos. Sin embargo, para la mayoría de las funciones del tidyverse (particularmente para visualizar datos) funcionan mejor con el formato tidy
+
+.center[
+&lt;img src="ima/tidy_data.png" width="600px" /&gt;
+]
+
+.right[[Wichkham &amp; Grolemund (2018)](https://r4ds.had.co.nz/tidy-data.html)]
+
+
+---
+## Estructura de datos
+
+El formato tidy parece obvio, pero muchas veces nos encontramos con datos distinta forma. Por ejemplo, no es tan extraño encontrar datos donde una sola variable está esparcida en varias columnas o una observación en más de una fila. Analizemos un caso muy común:
+
+
+```r
+wb_desempleo &lt;- data.frame(pais = c("Argentina", "Chile", "Uruguay"),
+                           d_2018 = c(9.2, 7.2, 8.3),
+                           d_2019 = c(9.8, 7.3, 9.3),
+                           d_2020 = c(11.7, 11.5, 12.7))
+```
+
+
+```r
+print(wb_desempleo)
+```
+
+```
+##        pais d_2018 d_2019 d_2020
+## 1 Argentina    9.2    9.8   11.7
+## 2     Chile    7.2    7.3   11.5
+## 3   Uruguay    8.3    9.3   12.7
+```
+
+---
+## Cambio de estructura de datos
+
+Para pasar datos a estructura tidy tenemos las funciones `pivot_longer()` (para pasar de formato ancho a largo) y `pivot_wider()` (para pasar de formarto largo a ancho) del paquete tidyr.
+
+.center[
+&lt;img src="ima/wide_long.png" width="600px" /&gt;
+]
+
+---
+## De ancho a largo con pivot_longer()
+
+.center[
+&lt;img src="ima/wide_ima.png" width="1000px" /&gt;
+]
+
+.right[[Wichkham &amp; Grolemund (2018)](https://r4ds.had.co.nz/tidy-data.html)]
+
+---
+## De ancho a largo con pivot_longer()
+
+.codefont[
+
+```r
+wb_unemp_long &lt;- wb_desempleo %&gt;% 
+  pivot_longer(cols = c("d_2018", "d_2019", "d_2020"), # Columnas a unir 
+               names_to = "year", # Nombre de variable "key" 
+               values_to = "desempleo") # Nombre de variable con valores
+print(wb_unemp_long)
+```
+
+```
+## # A tibble: 9 x 3
+##   pais      year   desempleo
+##   &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;
+## 1 Argentina d_2018       9.2
+## 2 Argentina d_2019       9.8
+## 3 Argentina d_2020      11.7
+## 4 Chile     d_2018       7.2
+## 5 Chile     d_2019       7.3
+## 6 Chile     d_2020      11.5
+## 7 Uruguay   d_2018       8.3
+## 8 Uruguay   d_2019       9.3
+## 9 Uruguay   d_2020      12.7
+```
+]
+
+---
+## De largo a ancho con pivot_wider()
+
+.center[
+&lt;img src="ima/long_ima.png" width="800px" /&gt;
+]
+
+.right[[Wichkham &amp; Grolemund (2018)](https://r4ds.had.co.nz/tidy-data.html)]
+
+---
+## De largo a ancho con pivot_wider()
+
+.codefont[
+
+
+```r
+print(wb_unemp)
+```
+
+```
+##        pais year       variable   valor
+## 1 Argentina 2018      desempleo     9.2
+## 2 Argentina 2019      desempleo     9.8
+## 3 Argentina 2020      desempleo    11.7
+## 4 Argentina 2018 pbi_per_capita 11633.0
+## 5 Argentina 2019 pbi_per_capita  9912.0
+```
+
+```r
+wb_unemp %&gt;% 
+  pivot_wider(names_from = variable,
+              values_from = valor)
+```
+
+```
+## # A tibble: 3 x 4
+##   pais       year desempleo pbi_per_capita
+##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;
+## 1 Argentina  2018       9.2          11633
+## 2 Argentina  2019       9.8           9912
+## 3 Argentina  2020      11.7             NA
+```
+]
+
+---
+
+# pivot_wider() después de summarise()
+
+Muchas veces luego de resumir los datos (sobretodo cuando agrupamos por más de una variable) queremos pasar los datos de formato largo a formato ancho. Una salida típica de `summarise()` después de agrupar por dos variables:
+
+.codefont[
+
+```r
+nba_data %&gt;%
+  mutate(home_team_wins = case_when(
+    home_team_wins == 1 ~ "Ganados",
+    TRUE ~ "Perdidos"
+  )) %&gt;% 
+  filter(home_team == "Chicago Bulls") %&gt;% 
+  group_by(season, home_team_wins) %&gt;% 
+  summarise(n = n())
+```
+
+```
+## # A tibble: 36 x 3
+## # Groups:   season [18]
+##    season home_team_wins     n
+##     &lt;dbl&gt; &lt;chr&gt;          &lt;int&gt;
+##  1   2003 Ganados           14
+##  2   2003 Perdidos          31
+##  3   2004 Ganados           30
+##  4   2004 Perdidos          16
+##  5   2005 Ganados           25
+##  6   2005 Perdidos          23
+##  7   2006 Ganados           38
+##  8   2006 Perdidos          13
+##  9   2007 Ganados           24
+## 10   2007 Perdidos          21
+## # ... with 26 more rows
+```
+]
+
+---
+
+# pivot_wider() después de summarise()
+
+Si agregamos `pivot_wider()` al final:
+
+.codefont[
+
+```r
+nba_data %&gt;%
+    mutate(home_team_wins = case_when(
+    home_team_wins == 1 ~ "Ganados",
+    TRUE ~ "Perdidos"
+  )) %&gt;% 
+  filter(home_team == "Chicago Bulls") %&gt;% 
+  group_by(season, home_team_wins) %&gt;% 
+  summarise(n = n()) %&gt;% 
+  pivot_wider(names_from = home_team_wins,
+              values_from = n)
+```
+
+```
+## # A tibble: 18 x 3
+## # Groups:   season [18]
+##    season Ganados Perdidos
+##     &lt;dbl&gt;   &lt;int&gt;    &lt;int&gt;
+##  1   2003      14       31
+##  2   2004      30       16
+##  3   2005      25       23
+##  4   2006      38       13
+##  5   2007      24       21
+##  6   2008      32       17
+##  7   2009      29       19
+##  8   2010      45        9
+##  9   2011      29        8
+## 10   2012      31       21
+## 11   2013      32       17
+## 12   2014      33       19
+## 13   2015      29       17
+## 14   2016      27       22
+## 15   2017      18       26
+## 16   2018      11       33
+## 17   2019      15       22
+## 18   2020       1        1
+```
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

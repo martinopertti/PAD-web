@@ -59,6 +59,11 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Solución de ejercicios](/scripts/semana_9_ej_sol.R)
 
 ### Semana 10: Manipulación de datos en R II
+*Unir datos, joins y cambios de estructura*
+- [Presentación](/r/semana-10.html)
+- [Código de clase](/scripts/semana_10_codigo.R)
+- [Ejercicios](/scripts/semana_10_ej.R)
+- [Solución de ejercicios](/scripts/semana_10_ej_sol.R)
 
 ### Semana 11: Visualización de datos en R
 
