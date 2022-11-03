@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Visualización de datos en R I</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+    <script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Visualización de datos en R I
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+# Principios de la visualización de datos
+
+---
+## ¿Por qué visualizar?
+
+Supongamos que tenemos los resultados finales del curso de matemática y estadística de 11 alumnos. Y nos dan esta tabla: 
+
+&lt;table class="table table-hover table-condensed" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Medida &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Matemática &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estadística &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Media &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Desvío estandar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+La correlación entre los resultados en matemática y estadística es de 0.81
+
+---
+
+## ¿Por qué visualizar?
+
+.codefont[
+
+```r
+resultados_finales &lt;- tibble(
+  matematica = c(8, 6, 11, 7, 9, 12, 4, 2, 10, 5, 3),
+  estadistica = c(6.04, 4.95, 5.58, 6.81, 6.33, 7.96, 5.24, 2.26, 8.84, 2.82, 3.68)
+)
+
+mean(resultados_finales$matematica)
+```
+
+```
+## [1] 7
+```
+
+```r
+sd(resultados_finales$matematica)
+```
+
+```
+## [1] 3.316625
+```
+
+```r
+mean(resultados_finales$estadistica)
+```
+
+```
+## [1] 5.500909
+```
+
+```r
+sd(resultados_finales$estadistica)
+```
+
+```
+## [1] 2.031568
+```
+
+```r
+cor(resultados_finales$matematica, resultados_finales$estadistica)
+```
+
+```
+## [1] 0.8164205
+```
+]
+
+
+---
+
+## ¿Por qué visualizar?
+
+![](semana-11_files/figure-html/ch0c-1.png)&lt;!-- --&gt;
+
+
+---
+## ¿Por qué visualizar?
+
+Cuatro conjuntos de datos:
+
+
+
+&lt;table class="table table-hover table-condensed" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; set &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mean_x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mean_y &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sd_x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sd_y &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Conjunto I &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Conjunto II &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Conjunto III &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Conjunto IV &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+## ¿Por qué visualizar?
+
+.center[
+![](semana-11_files/figure-html/ch2-1.png)&lt;!-- --&gt;
+]
+
+---
+## ¿Por qué visualizar?
+
+
+.center[
+&lt;img src="ima/datasaurus.gif" width="700px" /&gt;
+]
+
+Fuente: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
+
+---
+class: inverse, center, middle
+ 
+# Introducción  
+
+---
+
+## Introducción
+
+- Las visualizaciones representan datos de forma gráfica a través de líneas, formas, colores, etc.
+
+- La visualización de datos está a mitad de camino entre la ciencia y el arte. Por un lado, los gráficos deben ser una representación .bold[exacta] de los datos subyacentes, por el otro, una visualización efectiva debe ser estéticamente agradable. Idealmente, logramos alcanzar ambos objetivos. 
+
+- Lo imprescindible es no equivocarse con la parte .bold[matemática]. En segundo lugar, debemos hacer el esfuerzo para que los gráficos tengan en consideración lo que la ciencia sugiere sobre cómo las personas reaccionan a distintos estímulos y lograr gráficos estéticamente agradables.
+
+- Visualizar los datos de forma gráfica tiene muchas ventajas:
+      - Permite captar de forma rapida patrones que estadísticas descriptivas no permitirían
+      - Permite comunicar patrones en los datos de forma rápida y efectiva
+      - Permite identificar patrones complejos (relaciones no lineales por ejemplo)
+
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/mon_costs.jpg" width="600px" /&gt;
+]
+.right[Nigel Holmes (1982)]
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/equipos.jpeg" width="600px" /&gt;
+]
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/pew.png" width="500px" /&gt;
+]
+.right[Pew Research Center]
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/games.png" width="600px" /&gt;
+]
+.right[syntaxtechs]
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/ev.png" width="800px" /&gt;
+]
+.right[OPUY]
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/espn.png" width="600px" /&gt;
+]
+.right[ESPN]
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/ternario.png" width="500px" /&gt;
+]
+
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/life_exp.png" width="600px" /&gt;
+]
+.right[Healey (2018)]
+
+---
+## ¿Sí o no?
+
+.center[
+&lt;img src="ima/economist.png" width="500px" /&gt;
+]
+.right[The Economist]
+
+
+---
+## Tipos de errores
+- Ugly (feo): problemas estéticos pero gráfico claro e informativo
+- Bad (malo): problemas relacionados a la percepción: poco claro, confuso
+- Wrong (incorrecto): problemas relacionados a la matemática, objetivamente incorrecto
+
+.center[
+&lt;img src="ima/malas_graficas.png" width="400px" /&gt;
+]
+.right[[Wilke (2019)](https://clauswilke.com/dataviz/introduction.html)]
+
+---
+## Aesthetics
+
+- Cuando visualizamos datos tomamos valores y los convertimos de forma sistemática y lógica en elementos visuales.
+
+- Los aesthetics (cosas que puedes ver) son características cuantificables que le asignamos a nuestros datos
+
+.center[
+&lt;img src="ima/aes.png" width="500px" /&gt;
+]
+.right[[Wilke (2019)](https://clauswilke.com/dataviz/aesthetic-mapping.html)]
+
+
+---
+## Aesthetics
+
+- Distintos tipos de datos combinan bien con distintos tipos de aesthetics. Por ejemplo, no tiene mucho sentido utilizar formas para una variable contínua o gradientes de color para una variable categórica sin orden.
+
+- Existen muchos estudios como los humanos procesan estímulos visuales. Estos estudios permiten diferenciar qué tan fácil nos es entender los patrones en los datos a partir de estos aesthetics.
+
+
+---
+## Ranking perceptual para datos ordenados
+
+.center[
+&lt;img src="ima/prior.png" width="400px" /&gt;
+]
+.right[Schwabish (2021)]
+
+--
+## Remarcar datos
+.center[
+&lt;img src="ima/atention.png" width="600px" /&gt;
+]
+.right[Schwabish (2021)]
+
+
+---
+## Tipos de gráficos
+
+- Debido a que somos mejores identificado posiciones y tamaño, los gráficos de barras, líneas y dispersón son los más comunes.
+
+- Existe una tendencia hacia presentar gráficos de dispersión (maximizar el volumen de información mostrado) y gráficos que resumen modelos estadísticos.
+
+- Los paneles (o facetas) son cada vez más usados (ggplot2 da una enorme ventaja en este sentido)
+
+- [From Data to Viz](https://www.data-to-viz.com/#connectedscatter) es un gran recurso para elegir qué tipo de visualización podemos usar para cadá gráfico y además incluye código de ejemplos en R!
+
+---
+## Tipos de gráficos: cantidades
+
+.center[
+&lt;img src="ima/cant1.png" width="600px" /&gt;
+]
+
+.center[
+&lt;img src="ima/cant2.png" width="600px" /&gt;
+]
+
+.right[Wilke (2019)]
+
+
+---
+## Tipos de gráficos: distribuciones
+
+.center[
+&lt;img src="ima/dist1.png" width="600px" /&gt;
+]
+
+.center[
+&lt;img src="ima/dist2.png" width="600px" /&gt;
+]
+
+.right[Wilke (2019)]
+
+---
+## Tipos de gráficos: proporciones
+
+.center[
+&lt;img src="ima/prop1.png" width="500px" /&gt;
+]
+
+.center[
+&lt;img src="ima/prop2.png" width="500px" /&gt;
+]
+
+.center[
+&lt;img src="ima/prop3.png" width="450px" /&gt;
+]
+
+.right[Wilke (2019)]
+
+---
+## Tipos de gráficos: relación x-y
+
+.center[
+&lt;img src="ima/xy1.png" width="500px" /&gt;
+]
+
+.center[
+&lt;img src="ima/xy2.png" width="500px" /&gt;
+]
+
+.center[
+&lt;img src="ima/xy3.png" width="500px" /&gt;
+]
+
+.right[Wilke (2019)]
+
+---
+## Tipos de gráficos: geoespacial
+
+.center[
+&lt;img src="ima/geo.png" width="800px" /&gt;
+]
+
+.right[Wilke (2019)]
+
+---
+## Tipos de gráficos: incertidumbre
+
+.center[
+&lt;img src="ima/inc1.png" width="600px" /&gt;
+]
+
+.center[
+&lt;img src="ima/inc2.png" width="600px" /&gt;
+]
+
+.right[Wilke (2019)]
+
+---
+## Principios prácticos
+
+- Tres pilares: claridad, precisión y eficiencia
+
+.content-box-blue[*"Un buen gráfico da el lector la mayor cantidad de ideas en el menor tiempo con la menor cantidad de tinta y espacio.*
+Edward Tufte
+]
+
+- Simplificar! Evitar doble etiquetas, colores innecesarios, etc.
+
+- Graficos reproducibles (no editar a mano al menos que sea imprescindible)
+
+- Entender el tipo de data que estamos gráficando 
+
+- Entender el propósito de cada aesthetics 
+
+
+---
+## Recursos
+
+- [Fundamentals of data visualization: a primer on making informative and compelling
+figures](https://clauswilke.com/dataviz/), Wilke (2019). Es un libro (libre, entrar al enlace) sobre los fundamentos teóricos de la visuaización de datos (no incluye código, aunque sus ejemplos son hechos en R)
+
+- [Data visualization a practical introduction](https://socviz.co/), Healey (2018). Este libro combina elementos téoricos y prácticos (código en R!)
+
+- [Better data visualizations: A guide for scholars, researchers and wonks](http://cup.columbia.edu/book/better-data-visualizations/9780231193115). Schwabish (2021). Libro con principios de la visualización de datos.
+
+- [The Visual Display of Quantitative Information](edwardtufte.com/tufte/books_vdqi). Tufte (1983). Libro clásico sobre visualización de datos
+
+- [R for Data Science](https://r4ds.had.co.nz/data-visualisation.html). Wickham y Grolemund (2018). Los capítulos 3 y 28 explican cómo crear visualizaciones con ggplot2
+
+- [The R graph gallery](https://www.r-graph-gallery.com/index.html). Es una colección muy completa de visualizaciones de alta calidad hechas en R (usando distintos paquetes).
+
+---
+class: inverse, center, middle
+
+# Gapminder
+
+---
+
+## Gapminder
+
+[Gapminder](https://www.gapminder.org/) es una organización educativa sueca sin fines de lucro que se propone luchar contra percepciones erroneas en economía y salud mediante datos. Existe un paquete de R [Gapminder](https://cran.r-project.org/web/packages/gapminder/README.html) que contiene una base de datos sobre expectativa de vida, población y PBI per capita para muchos países. Es una versión reducida de algunos de los datos utilizados por su fundador Hans Rosling
+
+
+
+```r
+install.packages("gapminder")
+```
+
+.codefont[
+
+```r
+library(gapminder)
+```
+
+```
+## Warning: package 'gapminder' was built under R version 4.0.3
+```
+
+```r
+glimpse(gapminder)
+```
+
+```
+## Rows: 1,704
+## Columns: 6
+## $ country   &lt;fct&gt; "Afghanistan", "Afghanistan", "Afghanistan", "Afghanistan", ~
+## $ continent &lt;fct&gt; Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, ~
+## $ year      &lt;int&gt; 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, ~
+## $ lifeExp   &lt;dbl&gt; 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.854, 40.8~
+## $ pop       &lt;int&gt; 8425333, 9240934, 10267083, 11537966, 13079460, 14880372, 12~
+## $ gdpPercap &lt;dbl&gt; 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 786.1134, ~
+```
+]
+
+---
+class: inverse, center, middle
+
+# R Base
+
+---
+
+## Gráficos con R Base
+
+R Base permite crear gráficos como gráficos de barras, histogramas o gráficos de dispersión. Algunas de las funciones para realizar gráficos con R Base son `hist()`, `plot()` o `barplot()`
+
+.center[
+&lt;img src="ima/rbase_bar.png" width="400px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Intro a ggplot2
+
+---
+
+## ggplot2
+
+- [ggplot2](https://ggplot2.tidyverse.org/) es uno de los paquetes más utilizados de R para visualizar datos debido a su potencia, elegancia y versatilidad.
+
+- No tiene distintas funciones para distintos gráficos (como en el caso de R Base y la mayoría de los softwares) sino que tiene una grámatica de gráficos. Los distintos componentes independientes pueden ser combinados en un mismo gráfico. 
+
+- Tiene muchos argumentos en común para distintos tipos de gráficos
+
+- ggplot funciona con data en formato tidy!
+
+---
+## ggplot2
+
+- Funciona en capas que se van sumando con `+`. La primera función siempre es `ggplot()`, donde especificamos la data a usar. Esta función solo crea una gráfica vacía.
+
+- ggplot2 contiene varias funciones con las que se pueden ir creando distintos objetos geométricos (que están asociados a tipos de gráficos pero no son excluyentes). Estas se denominan `geom_()`, por ejemplo para gráficos puntos usamos `geom_point()`, para graficar barras `geom_bar()` y para graficar líneas `geom_line`, pero estos se pueden combinar también. 
+
+- [Lista](https://ggplot2.tidyverse.org/reference/)  entera de `geoms`
+
+- Dentro de cada `geom` se definen (o al principio dentro de `ggplot()`) los aesthetics usando `aes()`: `x`, `y`, `color`, `fill`, `shape`, etc.
+
+---
+
+## Especificar la data
+
+.codefont[
+
+```r
+library(gapminder)
+
+d_gap_7 &lt;- gapminder %&gt;% 
+  filter(year == 2007)
+
+# Especifico la data a usar
+plot &lt;- ggplot(data = d_gap_7)
+```
+]
+
+.center[
+&lt;img src="ima/plot1.png" width="500px" /&gt;
+]
+
+---
+
+## Asignar aesthetics (x, y)
+.codefont[
+
+```r
+# Asigno las primeras aesthetics (posición: x e y)
+plot &lt;- ggplot(data = d_gap_7, aes(x = gdpPercap, y = lifeExp))
+```
+]
+
+.center[
+&lt;img src="ima/plot2.png" width="600px" /&gt;
+]
+
+---
+
+## Definir primer geom
+.codefont[
+
+```r
+# Agrego con + una segunda capa: geom_point para dispersión
+plot &lt;- ggplot(data = d_gap_7, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+]
+
+.center[
+&lt;img src="ima/plot3.png" width="600px" /&gt;
+]
+
+---
+
+## Settings de un geom  
+.codefont[
+
+```r
+# Asigno atributos de geom_point: color, size, shape
+plot &lt;- ggplot(data = d_gap_7, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(color = "black", fill = "skyblue3", size = 3, shape = 21)
+```
+]
+
+.center[
+&lt;img src="ima/plot4.png" width="600px" /&gt;
+]
+
+
+---
+## Mapping vs setting
+
+- La función `aes()` no solo sirve para asignar posición `(x,y)` sino que también para [otras aesthetics](https://ggplot2.tidyverse.org/reference/aes.html) como tamaño, color, tipo de línea, etc. Sin embargo, cuando definimos esto dentro de `aes()` no nos referimos al color o al tipo de forma específico sino que a la variable por la que agrupamos esas aesthetics. Si específicamos `fill = continent` estamos diciendo que los colores representarán la variable continente. Después podemos especificar el color o la forma para cada grupo. A esto se le llama mapping  (asignar según una variable) 
+
+- .bold[Importante]: si definimos un setting (valor fijo) dentro de `aes()` no funcionará bien. Cuando queremos definir un setting (por ej. `color = "red"` lo hacemos fuera del `aes()`). 
+
+- Dentro del `geom()` podemos especificar los "settings": colores o formas específicas. O con otras funciones como `scale_color_brewer()`
+
+- Por ejemplo, supongamos que queremos crear un gráfico de dispersión donde el tamaño de los puntos refleje el tamaño de población y definir el color rojo para todos ellos:
+
+.codefont[
+
+```r
+ggplot(data = d_gap_7, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(size = pop), color = "red")
+```
+]
+
+---
+
+## Aesthetics por grupo
+.codefont[
+
+```r
+# Asigno color según una variable que agrupa (siempre dentro de aes()!)
+plot &lt;- ggplot(data = d_gap_7,
+               aes(x = gdpPercap, y = lifeExp, fill = continent)) +
+  geom_point(size = 3, shape = 21) 
+```
+]
+
+.center[
+&lt;img src="ima/plot5.png" width="600px" /&gt;
+]
+
+
+---
+
+## Otro geom (línea de tendencia)
+.codefont[
+
+```r
+# También puedo crear la línea de tendencia por grupo!
+plot &lt;- ggplot(data = d_gap_7, 
+               aes(x = gdpPercap, y = lifeExp, fill = continent, color = continent)) +
+  geom_point(size = 3, shape = 21) +
+  geom_smooth(method = "lm", se = FALSE)
+```
+]
+
+.center[
+&lt;img src="ima/plot6.png" width="600px" /&gt;
+]
+
+---
+
+## Cambio escala de x
+.codefont[
+
+```r
+# Cambio de escala Probar también xlim()
+plot &lt;- ggplot(data = d_gap_7, 
+               aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(size = 3, alpha = 0.3, color = "skyblue3") +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10() 
+```
+]
+
+.center[
+&lt;img src="ima/plot7.png" width="600px" /&gt;
+]
+
+
+---
+
+## Dividir en facetas
+.codefont[
+
+```r
+# Dividimos en facetas por continente (quitando Oceanía)
+plot &lt;- plot +
+  facet_wrap(~ continent)
+```
+]
+
+.center[
+&lt;img src="ima/plot8.png" width="550px" /&gt;
+]
+
+---
+
+## Quitamos etiqueta duplicada
+.codefont[
+
+```r
+# Quitamos etiqueta duplicada
+plot &lt;- plot +
+  theme(legend.position = "none")
+```
+]
+
+.center[
+&lt;img src="ima/plot9.png" width="550px" /&gt;
+]
+
+
+---
+
+## Quitamos colores 
+.codefont[
+
+```r
+# Quitamos colores innecesarios
+plot &lt;- ggplot(data = d_gap_7 %&gt;% 
+         filter(continent != "Oceania"), 
+       aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(size = 3, shape = 21,  alpha = .7, fill = "skyblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "navyblue")
+```
+]
+
+.center[
+&lt;img src="ima/plot10.png" width="550px" /&gt;
+]
+
+---
+
+## Agregamos una cuarta variable!
+.codefontchico[
+
+```r
+ggplot(data = d_gap_7 %&gt;% 
+         filter(continent != "Oceania"), 
+       aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(size = pop), shape = 21,  alpha = .7, fill = "skyblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "navyblue") +
+  scale_x_log10() 
+  facet_wrap(~ continent) 
+```
+]
+
+.center[
+&lt;img src="ima/plot11.png" width="550px" /&gt;
+]
+
+---
+
+## Manipular datos para mejor visualización
+.codefontchico[
+
+```r
+ggplot(data = d_gap_7 %&gt;% filter(continent != "Oceania") %&gt;% 
+         mutate(pop_mil = pop / 1000000), 
+       aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(size = pop_mil), shape = 21,  alpha = .7, fill = "skyblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "navyblue") +
+  scale_x_log10() +
+  facet_wrap(~ continent) +
+  theme(legend.position = "bottom") +
+  scale_size_continuous(name = "Población (en millones)")
+```
+]
+
+.center[
+&lt;img src="ima/plot12.png" width="550px" /&gt;
+]
+
+---
+
+## Estética
+.codefontchico[
+
+```r
+plot +
+  labs(title = "PBI per cápita y expectativa de vida",
+       subtitle = "Data de 2017",
+       caption = "Fuente: Gapminder",
+       x = "PBI per cápita",
+       y = "Expectativa de vida") +
+  theme_bw()
+```
+]
+
+.center[
+&lt;img src="ima/plot13.png" width="600px" /&gt;
+]
+
+
+---
+## Ejercicio
+
+.content-box-blue[
+*Cargar la base nba_data y crear dos gráficos:* 
+
+*(1) un histograma (con R base) de los puntos convertidos por los equipos locales en todos los partidos de la base* 
+
+*(2) un gráfico de dispersión con la relación entre puntos convertidos por el local y puntos convertidos por el visitante  *
+]
+
+
+---
+class: inverse, center, middle
+
+# Aesthetics
+
+---
+## Formas
+
+.center[
+&lt;img src="ima/shapes.png" width="600px" /&gt;
+]
+
+Hay formas duplicadas porque tienen distintas maneras de colorearse. De 0 a 14 las formas se pintan con `color` y se pinta solo el borde. De 15 a 20 se pinta con `color` también pero se rellena la forma y de 20 a 24 pintamos el borde con `color` y el relleno con `fill`
+
+---
+## Formas: definir una forma
+
+.codefont[
+
+```r
+## Definir forma específica
+ggplot(d_gap_7, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(shape = 9)
+```
+]
+
+.center[
+&lt;img src="ima/plot14.png" width="500px" /&gt;
+]
+
+---
+## Formas: asignar forma según variable
+
+.codefont[
+
+```r
+## Asignar forma según continente (ggplot elige por defecto formas)
+ggplot(d_gap_7, 
+       aes(x = gdpPercap, y = lifeExp, shape = continent)) +
+  geom_point() +
+  theme(legend.position = "bottom")
+```
+]
+
+.center[
+&lt;img src="ima/plot15.png" width="500px" /&gt;
+]
+
+---
+## Formas: definir forma para cada valor de variable
+
+.codefont[
+
+```r
+## Definir manualmente la forma para cada continente
+ggplot(d_gap_7, 
+       aes(x = gdpPercap, y = lifeExp, shape = continent)) +
+  geom_point() +
+  theme(legend.position = "bottom") +
+  scale_shape_manual(name = "Continente",
+                     values = c(15, 16, 17, 18, 19))
+```
+]
+
+.center[
+&lt;img src="ima/plot16.png" width="500px" /&gt;
+]
+
+---
+## Formas: definir forma para cada valor de variable
+
+.codefontchico[
+
+```r
+## Definir manualmente la forma para cada continente (otra forma)
+ggplot(d_gap_7, 
+       aes(x = gdpPercap, y = lifeExp, shape = continent)) +
+  geom_point() +
+  theme(legend.position = "bottom") +
+  scale_shape_manual(name = "Continente",
+                     values = c("Europe" = 3,
+                                "Oceania" = 8, 
+                                "Africa" = 12, 
+                                "Asia" = 18, 
+                                "Americas" = 22))
+```
+]
+
+.center[
+&lt;img src="ima/plot17.png" width="500px" /&gt;
+]
+
+---
+## Tipos de línea
+
+.center[
+&lt;img src="ima/lineas.png" width="600px" /&gt;
+]
+
+Las llamamos por su nombre:
+
+
+```r
+ggplot(data = data, x = variable1, y = variable2) +
+  geom_line(linetype = "dashed", color="red", size=2)
+```
+---
+## Tipos de línea: según variable
+
+.codefontchico[
+
+```r
+## Lineas por variable
+ggplot(conosur, aes(x = year, y = lifeExp)) +
+  geom_line(aes(linetype = country)) +
+  theme(legend.position = "bottom")
+```
+]
+
+.center[
+&lt;img src="ima/plot18.png" width="600px" /&gt;
+]
+
+---
+## Tipos de línea: definir tipo de linea para cada país
+
+.codefontchico[
+
+```r
+## Definir tipo de linea por país
+plot &lt;- ggplot(conosur, aes(x = year, y = lifeExp)) +
+  geom_line(aes(linetype = country)) +
+  theme(legend.position = "bottom") +
+  scale_linetype_manual(name = "País",
+                        values = c("Argentina" = "dotted",
+                                   "Chile" = "dashed",
+                                   "Uruguay" = "solid"))
+```
+]
+
+.center[
+&lt;img src="ima/plot19.png" width="600px" /&gt;
+]
+
+---
+## Tipos de línea: definir tipo de línea para cada país
+
+.codefontchico[
+
+```r
+## Definir tipo de linea por país
+plot +
+  geom_point(aes(shape = country)) +
+  labs(linetype = "País", shape = "País")
+```
+]
+
+.center[
+&lt;img src="ima/plot20.png" width="600px" /&gt;
+]
+
+---
+## Colores
+
+R tiene muchos colores definidos, además de que permite utilizar [hexcolors](https://htmlcolorcodes.com/es/). Con  `colors()` pueden ver una lista con ellos. Pueden consultar otra lista ampliada de colores [acá](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf?utm_source=twitterfeed&amp;utm_medium=twitter). [R graph gallery](https://www.r-graph-gallery.com/ggplot2-color.html) tiene una sección para aplicar distintos colores fácilmente. Algunos de los colores predeterminados (podemos llamarlos por su nombre, siempre entre paréntesis):
+
+.center[
+&lt;img src="ima/colores_lindos.png" width="500px" /&gt;
+]
+
+---
+## Paletas de colores
+
+En muchas visualizaciones no utilizamos un solo color sino que conjuntos de colores, o paletas. Distintas paletas sirven para distintos tipos de datos. El paquete [RColorBrewer](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) contiene las paletas más utilizadas. Hay tres tipos de paletas: 
+
+- Secuenciales: para data ordenada (van de colores más claros a oscuros, dentro de una misma tonalidad)
+
+- Divergentes: para data ordenada (los colores claros están en el medio y hacia los extremos toman tonalidades divergentes)
+
+- Cualitativas: para data no ordenada, simplemente distintos colores que se asignan a distintas clases, sin orden.
+
+A su vez, el paquete [viridis](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html) tiene paletas continuas y discretas con combinaciones de colores que permiten resaltar datos distintos, que no causan problemas en personas con daltonismo y que se imprimen bien en escala de grises.
+
+Ambos paquetes se integran muy bien con ggplot a través de distintas funciones como `scale_color_brewer()` o `scale_color_viridis()`
+---
+## Paletas de colores
+
+.center[
+&lt;img src="ima/rcolor_brewer.png" width="600px" /&gt;
+]
+
+---
+## Colores: por variable
+
+.codefontchico[
+
+```r
+## Color por país (ggplot elige automático)
+ggplot(conosur, aes(x = year, y = lifeExp, color = country)) +
+  geom_line() +
+  geom_point() +
+  theme(legend.position = "bottom")
+```
+]
+
+.center[
+&lt;img src="ima/plot21.png" width="600px" /&gt;
+]
+
+---
+## Colores: asignar colores manualmente
+
+.codefontchico[
+
+```r
+## Color por país (asigno colores manualmente)
+ggplot(conosur, aes(x = year, y = lifeExp, color = country)) +
+  geom_line() +
+  geom_point() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(name = "País",
+                     values = c("midnightblue", "red3", "lightskyblue"))
+```
+]
+
+.center[
+&lt;img src="ima/plot22.png" width="600px" /&gt;
+]
+
+
+---
+## Colores: detalles estéticos
+
+.codefontchico[
+
+```r
+## Color por país (otros detalles estéticos)
+ggplot(conosur, aes(x = year, y = lifeExp, color = country)) +
+  geom_line(size = 1.5, alpha = 0.4) +
+  geom_point(size = 3) +
+  theme(legend.position = "bottom") +
+  scale_color_manual(name = "País",
+                     values = c("midnightblue", "red3", "lightskyblue"))
+```
+]
+
+.center[
+&lt;img src="ima/plot23.png" width="600px" /&gt;
+]
+
+---
+## Colores: asignar colores con paleta de RColorBrewer
+
+.codefontchico[
+
+```r
+## Color por país (usando paletas de RColorBrewer: elegir una discreta para este caso)
+ggplot(conosur, aes(x = year, y = lifeExp, color = country)) +
+  geom_line(size = 1.5, alpha = 0.4) +
+  geom_point(size = 3) +
+  theme(legend.position = "bottom") +
+  scale_color_brewer(palette = "Dark2")
+```
+]
+
+.center[
+&lt;img src="ima/plot24.png" width="600px" /&gt;
+]
+
+---
+## Colores: paletas continuas
+
+.codefontchico[
+
+```r
+## Color con paleta continua con paquete viridis 
+ggplot(d_gap_7, aes(x = pop, y = gdpPercap, color = lifeExp)) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_color_viridis(name = "Expectativa de vida") +
+  theme(legend.position = "bottom") 
+```
+]
+
+.center[
+&lt;img src="ima/plot25.png" width="600px" /&gt;
+]
+
+---
+## Colores: paletas continuas
+
+.codefontchico[
+
+```r
+## Color con paleta continua especificando valores
+ggplot(d_gap_7, aes(x = pop, y = gdpPercap, color = lifeExp)) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_color_gradient(name = "Expectativa de vida", low = "red", high = "Blue") +
+  theme(legend.position = "bottom") 
+```
+]
+
+.center[
+&lt;img src="ima/plot26.png" width="600px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Tipos de geoms
+
+---
+## geom_bar()
+
+- ggplot2 cuenta con dos geoms para hacer gráficos de barras `geom_bar()` 
+
+-  Cuando usamos `geom_bar()`  tenemos que tener en cuenta dos argumentos clave: `stat` (nivel de agregación de la variable: count, proporción, etc.) y `position` (posición en la que se desplegan las categorías: apiladas, separadas, etc.)
+
+- Por defecto  `geom_bar()` grafica la cantidad de observaciones de cada valor de x (no necesita argumento y). Sin embargo, si ya tenemos una tabla resumida podemos ajustarlo con `stat = identity`, especificando un valor y.
+
+---
+## geom_bar()
+
+.codefontchico[
+
+```r
+table(d_gap_7$continent) # solo data de 2007 (gapminder)
+## Graficar cuántos países hay por continente en nuestra base
+ggplot(data = d_gap_7, aes(x = continent)) +
+  geom_bar()
+```
+]
+
+.center[
+&lt;img src="ima/plot27.png" width="600px" /&gt;
+]
+
+---
+## geom_bar(): 
+
+Por defecto no funciona con datos resumidos 
+
+.codefontchico[
+
+```r
+## Con datos resumidos
+data_resumen &lt;- d_gap_7 %&gt;% 
+  group_by(continent) %&gt;% 
+  summarize(n = n())
+ggplot(data_resumen, aes(x = continent)) +
+  geom_bar()
+```
+]
+
+.center[
+&lt;img src="ima/plot28.png" width="500px" /&gt;
+]
+
+---
+## geom_col(): 
+
+Para eso podemos usar `geom_col()`, especificando cuál es la columna con el valor con el argumento `y`
+
+.codefontchico[
+
+```r
+## Con datos resumidos
+data_resumen &lt;- d_gap_7 %&gt;% 
+  group_by(continent) %&gt;% 
+  summarize(n = n())
+
+ggplot(data_resumen, aes(x = continent, y = n)) +
+  geom_col()
+```
+]
+
+.center[
+&lt;img src="ima/plot28_b.png" width="500px" /&gt;
+]
+
+---
+## geom_bar(): con datos resumidos
+
+.codefontchico[
+
+```r
+# Especificamos el argumento stat = identity para trabajar con datos resumidos
+ggplot(data_resumen, aes(x = continent, y = n)) +
+  geom_bar(stat = "identity")
+```
+]
+
+.center[
+&lt;img src="ima/plot29.png" width="600px" /&gt;
+]
+
+---
+## geom_bar(): proporciones
+
+.codefontchico[
+
+```r
+ggplot(d_gap_7, aes(x = continent)) +
+  geom_bar(aes(y = ..prop.., group = 1))
+```
+]
+
+.center[
+&lt;img src="ima/plot30.png" width="600px" /&gt;
+]
+
+---
+## geom_bar(): barras por variable
+
+.codefontchico[
+
+```r
+data75 &lt;- d_gap_7 %&gt;% 
+  mutate(esp = case_when(lifeExp &gt; 75 ~ 1,
+                         TRUE ~ 0)) %&gt;% 
+  group_by(continent, esp) %&gt;% 
+  summarize(n = n())
+
+ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
+  geom_bar(stat = "identity", position = "stack") # posicion por defecto
+```
+]
+
+.center[
+&lt;img src="ima/plot31.png" width="600px" /&gt;
+]
+
+---
+## geom_bar(): barras agrupadas
+
+.codefontchico[
+
+```r
+## Podemos jugar con la posición: 
+# Barras agrupadas
+ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
+  geom_bar(stat = "identity", position = "dodge")
+```
+]
+
+.center[
+&lt;img src="ima/plot32.png" width="600px" /&gt;
+]
+
+---
+## geom_bar(): barras apiladas por proporción
+
+.codefontchico[
+
+```r
+# Barras proporción
+ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
+  geom_bar(stat = "identity", position = "fill")
+```
+]
+
+.center[
+&lt;img src="ima/plot33.png" width="600px" /&gt;
+]
+
+---
+## geom_bar(): estética
+
+.codefontchico[
+
+```r
+ggplot(data = d_gap_7, aes(x = continent)) +
+  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+  labs(title = "Cantidad de países por continente",
+       subtitle = "Data de Gapminder para el año 2007",
+       caption = "Fuente: Gapminder",
+       x = "", y = "")
+```
+]
+
+.center[
+&lt;img src="ima/plot34.png" width="600px" /&gt;
+]
+---
+## geom_bar(): girar
+
+.codefontchico[
+
+```r
+ggplot(data = d_gap_7, aes(x = continent)) +
+  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+  labs(title = "Cantidad de países por continente",
+       subtitle = "Data de Gapminder para el año 2007",
+       caption = "Fuente: Gapminder",
+       x = "", y = "") +
+  cord_flip()
+```
+]
+
+.center[
+&lt;img src="ima/plot35.png" width="500px" /&gt;
+]
+
+---
+## geom_bar(): ordenar categorías manualmente
+
+.codefontchico[
+
+```r
+positions &lt;- c("Americas", "Europe", "Africa", "Oceania", "Asia")
+
+ggplot(data = d_gap_7, aes(x = continent)) +
+  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+  labs(title = "Cantidad de países por continente",
+       subtitle = "Data de Gapminder para el año 2007",
+       caption = "Fuente: Gapminder",
+       x = "", y = "") +
+  scale_x_discrete(limits = positions)
+```
+]
+
+.center[
+&lt;img src="ima/plot36.png" width="500px" /&gt;
+]
+
+---
+## geom_bar(): ordenar categorías según frecuencia
+
+.codefontchico[
+
+```r
+ggplot(data = d_gap_7, aes(x = fct_infreq(continent))) +
+  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+  labs(title = "Cantidad de países por continente",
+       subtitle = "Data de Gapminder para el año 2007",
+       caption = "Fuente: Gapminder",
+       x = "", y = "")
+```
+]
+
+.center[
+&lt;img src="ima/plot37.png" width="600px" /&gt;
+]
+
+---
+## geom_text()
+
+Permite incluir texto en los gráficos, ver también `annotate()` y `geom_label()`. Como cualquier geom, se puede utilizar solo o combinado. Supongamos que queremos agregar etiquetas al siguiente gráfico:
+
+.codefontchico[
+
+```r
+lista_a_sur &lt;- c("Argentina", "Brazil", "Bolivia", "Chile", "Colombia", 
+                 "Ecuador", "Paraguay", "Peru", "Uruguay", "Venezuela")
+
+a_sur &lt;- gapminder %&gt;% 
+  filter(year == 2007 &amp; country %in% lista_a_sur)
+
+## Gráfico de dispersión expectativa de vida y pbi per cápita
+ggplot(a_sur, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+]
+
+.center[
+&lt;img src="ima/plot38.png" width="400px" /&gt;
+]
+
+---
+## geom_text()
+
+.codefontchico[
+
+```r
+# Agregar etiquetas
+ggplot(a_sur, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_text(aes(label = country))
+```
+]
+
+.center[
+&lt;img src="ima/plot39.png" width="600px" /&gt;
+]
+
+---
+## geom_text(): posición 
+
+.codefontchico[
+
+```r
+# Podemos ajustar la posición de las etiquetas
+ggplot(a_sur, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_text(aes(label = country), hjust = 0.5, vjust = -1)
+```
+]
+
+.center[
+&lt;img src="ima/plot40.png" width="600px" /&gt;
+]
+
+---
+## geom_text(): solo texto
+
+.codefontchico[
+
+```r
+# Podemos también dejar solo el texto
+ggplot(a_sur, aes(x = gdpPercap, y = lifeExp)) +
+  geom_text(aes(label = country))
+```
+]
+
+.center[
+&lt;img src="ima/plot41.png" width="600px" /&gt;
+]
+
+---
+## geom_text(): etiquetas en otros gráficos
+
+.codefontchico[
+
+```r
+ggplot(data = d_gap_7, aes(x = fct_infreq(continent))) +
+  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -.5, fontface = "bold") +
+  labs(title = "Cantidad de países por continente",
+       subtitle = "Data de Gapminder para el año 2007",
+       caption = "Fuente: Gapminder",
+       x = "",
+       y = "") 
+```
+]
+
+.center[
+&lt;img src="ima/plot42.png" width="600px" /&gt;
+]
+
+---
+## anotate(): texto en gráfico
+
+.codefontchico[
+
+```r
+ggplot(data = d_gap_7, aes(x = fct_infreq(continent))) +
+  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -.5, fontface = "bold") +
+  labs(title = "Cantidad de países por continente",
+       subtitle = "Data de Gapminder para el año 2007",
+       caption = "Fuente: Gapminder",
+       x = "",
+       y = "") +
+    annotate("text", x = "Oceania", y = 10, label = "Que pocos países \n hay en Oceanía")
+```
+]
+
+.center[
+&lt;img src="ima/plot43.png" width="600px" /&gt;
+]
+
+---
+## geom_boxplot()
+
+.codefontchico[
+
+```r
+## Boxplot tradicional
+d_gap_7 %&gt;%
+  filter(continent != "Oceania") %&gt;% 
+  ggplot(aes(x = continent, y = gdpPercap)) +
+  geom_boxplot() +
+```
+]
+
+.center[
+&lt;img src="ima/plot44.png" width="600px" /&gt;
+]
+
+
+---
+## geom_boxplot() y geom_jitter()
+
+.codefontchico[
+
+```r
+# Boxplot con todos los puntos con geom_jitter()
+d_gap_7 %&gt;%
+  filter(continent != "Oceania") %&gt;% 
+  ggplot(aes(x = continent, y = gdpPercap)) +
+  geom_boxplot(aes(fill = continent), outlier.shape = NA, lwd=1, alpha=0.4) +
+  geom_jitter(aes(color = continent), size = 4, alpha = 0.9) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  theme(legend.position = "none")
+```
+]
+
+.center[
+&lt;img src="ima/plot45.png" width="500px" /&gt;
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

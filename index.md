@@ -66,6 +66,7 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Solución de ejercicios](/scripts/semana_10_ej_sol.R)
 
 ### Semana 11: Visualización de datos en R
+- [Presentación](/r/semana-11.html)
 
 ### Semana 12: Estadística inferencial
 
