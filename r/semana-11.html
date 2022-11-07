@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Visualización de datos en R I</title>
+    <title>Visualización de datos en R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
     <script src="libs/header-attrs-2.14/header-attrs.js"></script>
@@ -31,7 +31,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Visualización de datos en R I
+# Visualización de datos en R
 ## Programación para el análisis de datos
 ### Departamento de Ciencias Sociales, UCU - Martín Opertti
 
@@ -522,7 +522,7 @@ class: inverse, center, middle
 R Base permite crear gráficos como gráficos de barras, histogramas o gráficos de dispersión. Algunas de las funciones para realizar gráficos con R Base son `hist()`, `plot()` o `barplot()`
 
 .center[
-&lt;img src="ima/rbase_bar.png" width="400px" /&gt;
+&lt;img src="ima/rbase_hist.png" width="400px" /&gt;
 ]
 
 ---
@@ -679,26 +679,6 @@ plot &lt;- ggplot(data = d_gap_7,
 
 ---
 
-## Cambio escala de x
-.codefont[
-
-```r
-# Cambio de escala Probar también xlim()
-plot &lt;- ggplot(data = d_gap_7, 
-               aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(size = 3, alpha = 0.3, color = "skyblue3") +
-  geom_smooth(method = "lm", se = FALSE) +
-  scale_x_log10() 
-```
-]
-
-.center[
-&lt;img src="ima/plot7.png" width="600px" /&gt;
-]
-
-
----
-
 ## Dividir en facetas
 .codefont[
 
@@ -809,18 +789,6 @@ plot +
 
 .center[
 &lt;img src="ima/plot13.png" width="600px" /&gt;
-]
-
-
----
-## Ejercicio
-
-.content-box-blue[
-*Cargar la base nba_data y crear dos gráficos:* 
-
-*(1) un histograma (con R base) de los puntos convertidos por los equipos locales en todos los partidos de la base* 
-
-*(2) un gráfico de dispersión con la relación entre puntos convertidos por el local y puntos convertidos por el visitante  *
 ]
 
 
@@ -965,7 +933,7 @@ plot &lt;- ggplot(conosur, aes(x = year, y = lifeExp)) +
 ]
 
 .center[
-&lt;img src="ima/plot19.png" width="600px" /&gt;
+&lt;img src="ima/plot19.png" width="500px" /&gt;
 ]
 
 ---
@@ -1141,7 +1109,7 @@ class: inverse, center, middle
 
 - ggplot2 cuenta con dos geoms para hacer gráficos de barras `geom_bar()` 
 
--  Cuando usamos `geom_bar()`  tenemos que tener en cuenta dos argumentos clave: `stat` (nivel de agregación de la variable: count, proporción, etc.) y `position` (posición en la que se desplegan las categorías: apiladas, separadas, etc.)
+-  Usamos `geom_bar()` para graficar datos crudos `geom_col()` para graficar datos agrupados. En ambas funciones, el argumento `position` nos sirven para asignar la posición en la que se desplegan las categorías: apiladas, separadas, etc.
 
 - Por defecto  `geom_bar()` grafica la cantidad de observaciones de cada valor de x (no necesita argumento y). Sin embargo, si ya tenemos una tabla resumida podemos ajustarlo con `stat = identity`, especificando un valor y.
 
@@ -1206,38 +1174,7 @@ ggplot(data_resumen, aes(x = continent, y = n)) +
 ]
 
 ---
-## geom_bar(): con datos resumidos
-
-.codefontchico[
-
-```r
-# Especificamos el argumento stat = identity para trabajar con datos resumidos
-ggplot(data_resumen, aes(x = continent, y = n)) +
-  geom_bar(stat = "identity")
-```
-]
-
-.center[
-&lt;img src="ima/plot29.png" width="600px" /&gt;
-]
-
----
-## geom_bar(): proporciones
-
-.codefontchico[
-
-```r
-ggplot(d_gap_7, aes(x = continent)) +
-  geom_bar(aes(y = ..prop.., group = 1))
-```
-]
-
-.center[
-&lt;img src="ima/plot30.png" width="600px" /&gt;
-]
-
----
-## geom_bar(): barras por variable
+## geom_col(): barras por variable
 
 .codefontchico[
 
@@ -1249,7 +1186,7 @@ data75 &lt;- d_gap_7 %&gt;%
   summarize(n = n())
 
 ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
-  geom_bar(stat = "identity", position = "stack") # posicion por defecto
+  geom_col(position = "stack") # posicion por defecto
 ```
 ]
 
@@ -1266,7 +1203,7 @@ ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
 ## Podemos jugar con la posición: 
 # Barras agrupadas
 ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
-  geom_bar(stat = "identity", position = "dodge")
+  geom_col(position = "dodge")
 ```
 ]
 
@@ -1275,14 +1212,14 @@ ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
 ]
 
 ---
-## geom_bar(): barras apiladas por proporción
+## geom_col(): barras apiladas por proporción
 
 .codefontchico[
 
 ```r
 # Barras proporción
 ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
-  geom_bar(stat = "identity", position = "fill")
+  geom_col(position = "fill")
 ```
 ]
 
@@ -1291,13 +1228,18 @@ ggplot(data75, aes(x = continent, y = n, fill = as.factor(esp))) +
 ]
 
 ---
-## geom_bar(): estética
+## geom_col(): estética
 
 .codefontchico[
 
 ```r
-ggplot(data = d_gap_7, aes(x = continent)) +
-  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+## Con datos resumidos
+data_resumen &lt;- d_gap_7 %&gt;% 
+  group_by(continent) %&gt;% 
+  summarize(n = n())
+
+ggplot(data = data_resumen, aes(x = continent, y = n)) +
+  geom_col(color = "black", fill = "skyblue3", alpha = .8) +
   labs(title = "Cantidad de países por continente",
        subtitle = "Data de Gapminder para el año 2007",
        caption = "Fuente: Gapminder",
@@ -1306,7 +1248,7 @@ ggplot(data = d_gap_7, aes(x = continent)) +
 ]
 
 .center[
-&lt;img src="ima/plot34.png" width="600px" /&gt;
+&lt;img src="ima/plot34.png" width="450px" /&gt;
 ]
 ---
 ## geom_bar(): girar
@@ -1314,8 +1256,8 @@ ggplot(data = d_gap_7, aes(x = continent)) +
 .codefontchico[
 
 ```r
-ggplot(data = d_gap_7, aes(x = continent)) +
-  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+ggplot(data = data_resumen, aes(x = continent, y = n)) +
+  geom_col(color = "black", fill = "skyblue3", alpha = .8) +
   labs(title = "Cantidad de países por continente",
        subtitle = "Data de Gapminder para el año 2007",
        caption = "Fuente: Gapminder",
@@ -1336,8 +1278,8 @@ ggplot(data = d_gap_7, aes(x = continent)) +
 ```r
 positions &lt;- c("Americas", "Europe", "Africa", "Oceania", "Asia")
 
-ggplot(data = d_gap_7, aes(x = continent)) +
-  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+ggplot(data = data_resumen, aes(x = continent, y = n)) +
+  geom_col(color = "black", fill = "skyblue3", alpha = .8) +
   labs(title = "Cantidad de países por continente",
        subtitle = "Data de Gapminder para el año 2007",
        caption = "Fuente: Gapminder",
@@ -1356,8 +1298,8 @@ ggplot(data = d_gap_7, aes(x = continent)) +
 .codefontchico[
 
 ```r
-ggplot(data = d_gap_7, aes(x = fct_infreq(continent))) +
-  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
+ggplot(data = data_resumen, aes(x = fct_reorder(continent, -n), y = n)) +
+  geom_col(color = "black", fill = "skyblue3", alpha = .8) +
   labs(title = "Cantidad de países por continente",
        subtitle = "Data de Gapminder para el año 2007",
        caption = "Fuente: Gapminder",
@@ -1449,9 +1391,9 @@ ggplot(a_sur, aes(x = gdpPercap, y = lifeExp)) +
 .codefontchico[
 
 ```r
-ggplot(data = d_gap_7, aes(x = fct_infreq(continent))) +
-  geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -.5, fontface = "bold") +
+ggplot(data = data_resumen, aes(x = fct_reorder(continent, -n), y = n)) +
+  geom_col(color = "black", fill = "skyblue3", alpha = .8) +
+  geom_text(aes(label = n),  vjust = -.5, fontface = "bold") +
   labs(title = "Cantidad de países por continente",
        subtitle = "Data de Gapminder para el año 2007",
        caption = "Fuente: Gapminder",
@@ -1472,7 +1414,7 @@ ggplot(data = d_gap_7, aes(x = fct_infreq(continent))) +
 ```r
 ggplot(data = d_gap_7, aes(x = fct_infreq(continent))) +
   geom_bar(color = "black", fill = "skyblue3", alpha = .8) +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -.5, fontface = "bold") +
+  geom_text(aes(label = n), vjust = -.5, fontface = "bold") +
   labs(title = "Cantidad de países por continente",
        subtitle = "Data de Gapminder para el año 2007",
        caption = "Fuente: Gapminder",

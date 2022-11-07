@@ -67,6 +67,9 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 
 ### Semana 11: Visualización de datos en R
 - [Presentación](/r/semana-11.html)
+- [Código de clase](/scripts/semana_11_codigo.R)
+- [Ejercicios](/scripts/semana_11_ej.R)
+- [Solución de ejercicios](/scripts/semana_11_ej_sol.R)
 
 ### Semana 12: Estadística inferencial
 
