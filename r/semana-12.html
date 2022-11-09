@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Estadística Inferencial</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Estadística Inferencial
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+# Intervalos de confianza
+
+---
+
+## Simular datos de resultados electorales
+
+.codefont[
+
+```r
+# Fijo semilla para reproducir los resultados
+set.seed(77)
+
+# Crear data poblacional
+datos_votos &lt;- sample(x = c("Partido A", "Partido B", "Partido C"),
+                      size = 3000000, 
+                      replace = TRUE, 
+                      prob = c(.25, .35, .4)
+)
+
+datos_votos &lt;- tibble(voto = datos_votos)
+
+datos_votos
+```
+
+```
+## # A tibble: 3,000,000 x 1
+##    voto     
+##    &lt;chr&gt;    
+##  1 Partido C
+##  2 Partido B
+##  3 Partido A
+##  4 Partido A
+##  5 Partido B
+##  6 Partido B
+##  7 Partido A
+##  8 Partido A
+##  9 Partido B
+## 10 Partido B
+## # ... with 2,999,990 more rows
+```
+]
+
+---
+
+## Resumen datos
+
+.codefont[
+
+```r
+# Tabla resumen de los datos simulados
+datos_votos %&gt;% 
+  group_by(voto) %&gt;%
+  summarise(n = n()) %&gt;% 
+  mutate(per = n / sum(n))
+```
+
+```
+## # A tibble: 3 x 3
+##   voto            n   per
+##   &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt;
+## 1 Partido A  750865 0.250
+## 2 Partido B 1050109 0.350
+## 3 Partido C 1199026 0.400
+```
+]
+
+---
+
+## Resumen con margen de error e intervalo de confianza
+
+R tiene muchas funciones para realizar estadística inferencial. En el caso de los intervalos de confianza -entre otras opciones- podemos calcularlos manualmente o, por ejemplo, con la función `summarySE()` del paquete Rmisc. 
+
+.codefont[
+
+```r
+# Extraigo una muestra de 1000 casos 
+m_1000 &lt;- sample_n(datos_votos, 1000)
+
+# Ahora calculamos manualmente el margen de error e intervalo de confianza 
+# para esta muestra
+m_1000_sum &lt;- m_1000 %&gt;% 
+  group_by(voto) %&gt;% 
+  summarise(n = n()) %&gt;% 
+  mutate(
+    prop = n/sum(n), # Proporción de cada categoría
+    moe = (qnorm(0.975) * sqrt(prop*(1-prop)/1000)), # margen de error al 95% confianza    ci_inf =  prop - moe, # Intervalo inferior
+    ci_inf =  prop - moe, # Intervalo superior
+    ci_sup =  prop + moe # Intervalo superior
+  ) 
+
+m_1000_sum
+```
+
+```
+## # A tibble: 3 x 6
+##   voto          n  prop    moe ci_inf ci_sup
+##   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Partido A   241 0.241 0.0265  0.214  0.268
+## 2 Partido B   362 0.362 0.0298  0.332  0.392
+## 3 Partido C   397 0.397 0.0303  0.367  0.427
+```
+]
+
+
+---
+## Intervalos de confianza con geom_errorbar()
+  
+.codefontchico[
+
+```r
+# Graficamos
+ggplot(m_1000_sum, aes(x = voto, y = prop, color = voto)) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = ci_inf, ymax = ci_sup), width = .2, lwd = .75) +
+  theme_minimal(base_size = 16) +
+  labs(title = "Estimación muestra puntual (N = 1000) con intervalo de confianza",
+       x = "",
+       y = "") +
+  scale_color_brewer(palette = "Dark2") +
+  theme(legend.position = "none")
+```
+]
+
+.center[
+&lt;img src="ima/plot_52.png" width="500px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Correlación
+
+---
+## Correlación
+
+En R la correlación entre dos variables se calcula con la función `cor()`
+
+
+```r
+gapminder &lt;- gapminder::gapminder
+
+cor(gapminder$lifeExp, gapminder$gdpPercap)
+```
+
+```
+## [1] 0.5837062
+```
+
+```r
+cor(gapminder$lifeExp, gapminder$gdpPercap, method = "spearman")
+```
+
+```
+## [1] 0.8264712
+```
+
+---
+## Graficar correlación
+
+.codefont[
+
+```r
+ggplot(data = gapminder, aes(x = lifeExp, y = gdpPercap)) +
+  geom_point(shape = 21, fill = '#73C6B6',  size = 3, alpha = .7) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  geom_text(label = paste("Correlación:", round(cor(gapminder$lifeExp, gapminder$gdpPercap), 2)), x = 70, y = 100000) +
+  theme_minimal() 
+```
+]
+
+.center[
+&lt;img src="cor_1.png" width="500px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Pruebas de hipótesis
+
+---
+
+## Pruebas t 
+
+En R podemos realizar pruebas t con La función t.test() del R Base.
+
+En este casos realizaremos una prueba t para muestras independientes (dos grupos)
+ 
+.codefontchico[
+
+```r
+df_gap &lt;- filter(gapminder::gapminder, 
+                 continent %in% c("Americas", "Europe")) %&gt;% 
+  mutate(continent = as.factor(as.character(continent)))
+
+prueba_t &lt;- t.test(lifeExp ~ continent, data = df_gap)
+
+prueba_t
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  lifeExp by continent
+## t = -11.861, df = 460.72, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -8.445287 -6.044612
+## sample estimates:
+## mean in group Americas   mean in group Europe 
+##               64.65874               71.90369
+```
+]
+
+
+---
+
+## Limpiar resultados con broom
+
+Para analizar mejor los resultados de nuestros modelos podemos utilizar el paquete [broom](https://broom.tidymodels.org/). La función `tidy()`, por ejemplo, nos permite extraer los resultados de la prueba (o de cualquier modelo de regresión) en un dataframe en formato tidy
+
+
+.codefontchico[
+
+```r
+prueba_t &lt;- broom::tidy(prueba_t)
+
+prueba_t
+```
+
+```
+## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic  p.value parameter conf.low conf.high
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1    -7.24      64.7      71.9     -11.9 1.67e-28      461.    -8.45     -6.04
+## # ... with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+```
+]
+
+
+---
+## Limpiar resultados con broom
+
+Al transformar los resultados en un objeto `tibble()` podemos manipular, visualizar y guardar los resultados de igual manera que cualquier otro dataframe.
+
+.codefont[
+
+```r
+prueba_t &lt;- prueba_t %&gt;% 
+  rename(estimador = estimate) 
+
+prueba_t
+```
+
+```
+## # A tibble: 1 x 10
+##   estimador estimate1 estimate2 statistic  p.value parameter conf.low conf.high
+##       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1     -7.24      64.7      71.9     -11.9 1.67e-28      461.    -8.45     -6.04
+## # ... with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+```
+
+```r
+writexl::write_xlsx(prueba_t, "resultados_t.xlsx")
+```
+]
+
+---
+class: inverse, center, middle
+
+# Modelos de regresión
+
+---
+## Modelos de regresión lineal
+
+R trae un conjunto de funciones para estimar modelos de regresión. `lm()` sirve para estimar una regresión lineal. El primer argumento es la variable dependiente, luego `~` seguido de las variables independientes separadas por `+`, luego en el argumento data especificamos el dataframe a utilizar:
+
+
+```r
+reg &lt;- lm(var_dependiente ~ var_ind_1 + var_ind2, data = mi_data)
+
+summary(reg) # Con summary podemos ver los resultados
+```
+
+---
+
+## Modelos de regresión
+
+Volvamos a la data de gapminder y estimemos un modelo de regresión cuya variable dependiente sea expectativa de vida y las variables independientes el PBI per cápita. 
+
+.codefontchico[
+
+```r
+gapminder &lt;- gapminder::gapminder
+
+reg &lt;- lm(lifeExp ~ gdpPercap + pop + year + continent, data = gapminder)
+
+summary(reg) # Con summary podemos ver los resultados
+```
+
+```
+## 
+## Call:
+## lm(formula = lifeExp ~ gdpPercap + pop + year + continent, data = gapminder)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -28.4051  -4.0550   0.2317   4.5073  20.0217 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       -5.185e+02  1.989e+01 -26.062   &lt;2e-16 ***
+## gdpPercap          2.985e-04  2.002e-05  14.908   &lt;2e-16 ***
+## pop                1.791e-09  1.634e-09   1.096    0.273    
+## year               2.863e-01  1.006e-02  28.469   &lt;2e-16 ***
+## continentAmericas  1.429e+01  4.946e-01  28.898   &lt;2e-16 ***
+## continentAsia      9.375e+00  4.719e-01  19.869   &lt;2e-16 ***
+## continentEurope    1.936e+01  5.182e-01  37.361   &lt;2e-16 ***
+## continentOceania   2.056e+01  1.469e+00  13.995   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 6.883 on 1696 degrees of freedom
+## Multiple R-squared:  0.7172,	Adjusted R-squared:  0.716 
+## F-statistic: 614.5 on 7 and 1696 DF,  p-value: &lt; 2.2e-16
+```
+]
+
+
+---
+## Modelos de regresión generalizados
+
+Con `glm()` podemos estimar otros modelos como probit, poisson o logit. `glm()` tiene la misma lógica que `lm()` solo que especificamos el tipo de modelo mediante el argumento [family](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/family.html) y cuando es necesario una especificación adicional con el argumento link
+
+
+```r
+# Logit
+reg &lt;- glm(var_dependiente ~ var_ind_1 + var_ind2, 
+           data = mi_data,
+           family = binomial(link = "logit"))
+
+# Probit
+reg &lt;- glm(var_dependiente ~ var_ind_1 + var_ind2,
+           data = mi_data,
+           family = binomial(link = "probit"))
+           
+# Poisson
+reg &lt;- glm(var_dependiente ~ var_ind_1 + var_ind2, 
+           data = mi_data,
+           family = "poisson")
+```
+
+---
+## Regresión logística
+
+Ahora creemos una nueva variable de expectativa de vida que sea binaria y estimemos una regresión logística. La variable tendrá valor 1 cuando la expectativa de vida sea mayor a 70 y 0 si no lo es. 
+
+
+```r
+# Creo nueva variable
+gapminder &lt;- mutate(gapminder, 
+                    lifeExp_rec = case_when(lifeExp &gt; 70 ~ 1,
+                                            TRUE ~ 0)
+                    )
+
+# Por más que tenga solo dos valores, es numérica
+class(gapminder$lifeExp_rec)
+```
+
+```
+## [1] "numeric"
+```
+
+```r
+# Para esto debo transformarla a factor
+gapminder &lt;- mutate(gapminder,
+                    lifeExp_rec = as.factor(lifeExp_rec))
+
+class(gapminder$lifeExp_rec)
+```
+
+```
+## [1] "factor"
+```
+
+---
+## Regresión logística
+
+.codefontchico[
+
+```r
+reg_logit &lt;- glm(lifeExp_rec ~ gdpPercap + pop + year + continent,
+                 data = gapminder,
+                 family = binomial(link = "logit"))
+summary(reg_logit)
+```
+
+```
+## 
+## Call:
+## glm(formula = lifeExp_rec ~ gdpPercap + pop + year + continent, 
+##     family = binomial(link = "logit"), data = gapminder)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -4.3649  -0.3727  -0.1272   0.1175   2.6974  
+## 
+## Coefficients:
+##                     Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)       -2.052e+02  1.486e+01 -13.808  &lt; 2e-16 ***
+## gdpPercap          1.221e-04  1.431e-05   8.534  &lt; 2e-16 ***
+## pop                1.520e-10  6.416e-10   0.237    0.813    
+## year               1.011e-01  7.434e-03  13.604  &lt; 2e-16 ***
+## continentAmericas  3.010e+00  3.073e-01   9.795  &lt; 2e-16 ***
+## continentAsia      1.951e+00  3.088e-01   6.317 2.67e-10 ***
+## continentEurope    5.221e+00  3.745e-01  13.941  &lt; 2e-16 ***
+## continentOceania   6.911e+00  9.175e-01   7.532 4.98e-14 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 2050.05  on 1703  degrees of freedom
+## Residual deviance:  869.98  on 1696  degrees of freedom
+## AIC: 885.98
+## 
+## Number of Fisher Scoring iterations: 6
+```
+]
+
+---
+## Regresión logística
+
+Cambiar categoría de referencia de un factor
+
+.codefontchico[
+
+```r
+gapminder &lt;- mutate(gapminder,
+                    continent = relevel(continent, ref = "Americas"))
+
+reg_logit_2 &lt;- glm(lifeExp_rec ~ gdpPercap + pop + year + continent,
+                   family = binomial(link = "logit"),
+                   data = gapminder)
+
+summary(reg_logit_2)
+```
+
+```
+## 
+## Call:
+## glm(formula = lifeExp_rec ~ gdpPercap + pop + year + continent, 
+##     family = binomial(link = "logit"), data = gapminder)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -4.3649  -0.3727  -0.1272   0.1175   2.6974  
+## 
+## Coefficients:
+##                    Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)      -2.022e+02  1.477e+01 -13.686  &lt; 2e-16 ***
+## gdpPercap         1.221e-04  1.431e-05   8.534  &lt; 2e-16 ***
+## pop               1.520e-10  6.416e-10   0.237    0.813    
+## year              1.011e-01  7.434e-03  13.604  &lt; 2e-16 ***
+## continentAfrica  -3.010e+00  3.073e-01  -9.795  &lt; 2e-16 ***
+## continentAsia    -1.059e+00  2.374e-01  -4.463 8.10e-06 ***
+## continentEurope   2.211e+00  2.667e-01   8.291  &lt; 2e-16 ***
+## continentOceania  3.901e+00  8.704e-01   4.482 7.41e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 2050.05  on 1703  degrees of freedom
+## Residual deviance:  869.98  on 1696  degrees of freedom
+## AIC: 885.98
+## 
+## Number of Fisher Scoring iterations: 6
+```
+]
+
+---
+
+## Modelos de regresión 
+
+Utilizamos nuevamente la función tidy del paquete Broom para limpiar los resultados.
+
+.codefont[
+
+```r
+library(broom)
+
+coef &lt;- tidy(reg, conf.int = TRUE) 
+
+print(coef)
+```
+
+```
+## # A tibble: 8 x 7
+##   term              estimate std.error statistic   p.value conf.low conf.high
+##   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)       -5.18e+2   1.99e+1    -26.1  3.25e-126 -5.57e+2  -4.79e+2
+## 2 gdpPercap          2.98e-4   2.00e-5     14.9  2.52e- 47  2.59e-4   3.38e-4
+## 3 pop                1.79e-9   1.63e-9      1.10 2.73e-  1 -1.41e-9   5.00e-9
+## 4 year               2.86e-1   1.01e-2     28.5  4.80e-146  2.67e-1   3.06e-1
+## 5 continentAmericas  1.43e+1   4.95e-1     28.9  1.18e-149  1.33e+1   1.53e+1
+## 6 continentAsia      9.38e+0   4.72e-1     19.9  3.80e- 79  8.45e+0   1.03e+1
+## 7 continentEurope    1.94e+1   5.18e-1     37.4  2.03e-223  1.83e+1   2.04e+1
+## 8 continentOceania   2.06e+1   1.47e+0     14.0  3.39e- 42  1.77e+1   2.34e+1
+```
+]
+
+---
+
+## Modelos de regresión 
+
+ Uso `mutate_if()` para redondear todas las variables numéricas, para utilizar `mutate()` para varias columnas al mismo tiempo [ver](https://dplyr.tidyverse.org/reference/mutate_all.html)
+ 
+.codefont[
+
+```r
+# También para la regresión logística
+
+coef_log2 &lt;- tidy(reg_logit_2, conf.int = TRUE) %&gt;%
+    mutate_if(is.numeric, ~ round(., 4))
+
+print(coef_log2)
+```
+
+```
+## # A tibble: 8 x 7
+##   term              estimate std.error statistic p.value  conf.low conf.high
+##   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)      -202.       14.8      -13.7     0     -232.     -174.    
+## 2 gdpPercap           0.0001    0          8.53    0        0.0001    0.0002
+## 3 pop                 0         0          0.237   0.813    0         0     
+## 4 year                0.101     0.0074    13.6     0        0.087     0.116 
+## 5 continentAfrica    -3.01      0.307     -9.79    0       -3.64     -2.43  
+## 6 continentAsia      -1.06      0.237     -4.46    0       -1.53     -0.598 
+## 7 continentEurope     2.21      0.267      8.29    0        1.70      2.75  
+## 8 continentOceania    3.90      0.870      4.48    0        2.35      5.90
+```
+]
+
+---
+
+## Modelos de regresión 
+
+Si utilizamos fijamos `exponentiate = TRUE` dentro de `tidy()` en una regresión logística obtenemos los odds ratios
+
+.codefont[
+
+```r
+coef_log3 &lt;- tidy(reg_logit_2, 
+                  exponentiate = TRUE,
+                  conf.int = TRUE) %&gt;%
+    mutate_if(is.numeric, ~ round(., 5))
+
+print(coef_log3)
+```
+
+```
+## # A tibble: 8 x 7
+##   term             estimate std.error statistic p.value conf.low conf.high
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)        0       14.8       -13.7   0         0         0     
+## 2 gdpPercap          1.00     0.00001     8.53  0         1.00      1.00  
+## 3 pop                1        0           0.237 0.813     1         1     
+## 4 year               1.11     0.00743    13.6   0         1.09      1.12  
+## 5 continentAfrica    0.0493   0.307      -9.79  0         0.0264    0.0883
+## 6 continentAsia      0.347    0.237      -4.46  0.00001   0.216     0.550 
+## 7 continentEurope    9.12     0.267       8.29  0         5.47     15.6   
+## 8 continentOceania  49.4      0.870       4.48  0.00001  10.5     366.
+```
+]
+
+
+---
+## Modelos de regresión 
+
+Con `glance()` también del paquete broom podemos obtener un tibble de una fila con estadísticas de bondad del modelo
+
+
+```r
+glance(reg_logit_2)
+```
+
+```
+## # A tibble: 1 x 8
+##   null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
+##           &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+## 1         2050.    1703  -435.  886.  930.     870.        1696  1704
+```
+
+---
+
+## Visualizar coeficientes
+
+Con broom y ggplot2 podemos graficar los coeficientes de regresión:
+
+.codefont[
+
+```r
+# Modelo con un solo predictor (continentes)
+r_logit_1 &lt;- glm(lifeExp_rec ~ continent,
+                 family = binomial(link = "logit"),
+                 data = gapminder)
+
+coef_l_1 &lt;- broom::tidy(r_logit_1, conf.int = TRUE) 
+
+coef_l_1
+```
+
+```
+## # A tibble: 5 x 7
+##   term             estimate std.error statistic  p.value conf.low conf.high
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)        -0.663     0.122     -5.44 5.26e- 8   -0.906    -0.427
+## 2 continentAfrica    -2.80      0.263    -10.6  1.96e-26   -3.34     -2.30 
+## 3 continentAsia      -0.518     0.170     -3.05 2.32e- 3   -0.852    -0.185
+## 4 continentEurope     1.58      0.169      9.35 8.55e-21    1.25      1.91 
+## 5 continentOceania    3.06      0.749      4.09 4.32e- 5    1.81      4.90
+```
+]
+
+---
+
+## Visualizar coeficientes
+
+.codefont[
+
+```r
+ggplot(coef_l_1, aes(x = estimate, y = term)) +
+  geom_pointrange(aes(xmin = conf.low, xmax = conf.high)) +
+  labs(title = "Factores explicativos de la expectativa de vida",
+       subtitle = "Coeficientes de regresión de lineal",
+       caption = "Data: Gapminder")
+```
+]
+
+.center[
+&lt;img src="ima/plot54.png" width="500px" /&gt;
+]
+
+
+---
+
+
+## Visualizar coeficientes
+
+.codefont[
+
+```r
+# Quitamos el intercepto y agregamos línea vertical en 0
+  ggplot(coef_l_1 %&gt;% 
+  filter(term != "(Intercept)"), aes(x = estimate, y = term)) +
+  geom_pointrange(aes(xmin = conf.low, xmax = conf.high)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  labs(title = "Factores explicativos de la expectativa de vida",
+       subtitle = "Coeficientes de regresión de lineal (excluye intercepto)",
+       caption = "Data: Gapminder")
+```
+]
+
+.center[
+&lt;img src="ima/plot55.png" width="500px" /&gt;
+]
+
+---
+
+## Comparar coeficientes de dos modelos anidados
+
+Estimamos dos modelos anidados y los unimos los dos dataframes que contienen los resultados obtenidos con la función `tidy()`
+
+.codefont[
+
+```r
+# Solo continente
+r_logit_1 &lt;- glm(lifeExp_rec ~ continent,
+                 family = binomial(link = "logit"),
+                 data = gapminder)
+
+coef_l_1 &lt;- tidy(r_logit_1, conf.int = TRUE) 
+
+# Continente + gdp
+r_logit_2 &lt;- glm(lifeExp_rec ~ continent + gdpPercap,
+                 family = binomial(link = "logit"),
+                 data = gapminder)
+
+coef_l_2 &lt;- tidy(r_logit_2, conf.int = TRUE)
+
+# Primero variable que identifique cada dataframe
+coef_l_1 &lt;- mutate(coef_l_1, modelo = "Modelo 1")
+coef_l_2 &lt;- mutate(coef_l_2, modelo = "Modelo 2")
+
+# Unimos los resultados de ambos modelos
+coef_l_merge &lt;- rbind(coef_l_1, coef_l_2)
+```
+]
+
+---
+
+## Comparar coeficientes de dos modelos anidados
+
+.codefont[
+
+```r
+# La data resultante:
+coef_l_merge
+```
+
+```
+## # A tibble: 11 x 8
+##    term         estimate std.error statistic  p.value conf.low conf.high modelo 
+##    &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;  
+##  1 (Intercept) -0.663    0.122         -5.44 5.26e- 8 -9.06e-1 -0.427    Modelo~
+##  2 continentA~ -2.80     0.263        -10.6  1.96e-26 -3.34e+0 -2.30     Modelo~
+##  3 continentA~ -0.518    0.170         -3.05 2.32e- 3 -8.52e-1 -0.185    Modelo~
+##  4 continentE~  1.58     0.169          9.35 8.55e-21  1.25e+0  1.91     Modelo~
+##  5 continentO~  3.06     0.749          4.09 4.32e- 5  1.81e+0  4.90     Modelo~
+##  6 (Intercept) -1.79     0.156        -11.5  1.39e-30 -2.10e+0 -1.49     Modelo~
+##  7 continentA~ -2.17     0.273         -7.94 2.06e-15 -2.73e+0 -1.65     Modelo~
+##  8 continentA~ -0.750    0.200         -3.76 1.72e- 4 -1.14e+0 -0.361    Modelo~
+##  9 continentE~  0.831    0.189          4.39 1.13e- 5  4.62e-1  1.20     Modelo~
+## 10 continentO~  1.56     0.774          2.02 4.36e- 2  2.44e-1  3.44     Modelo~
+## 11 gdpPercap    0.000159 0.0000125     12.8  3.06e-37  1.35e-4  0.000184 Modelo~
+```
+]
+
+---
+
+## Comparar coeficientes de dos modelos anidados
+
+.codefontchico[
+
+```r
+coef_l_merge %&gt;% 
+  filter(term != "(Intercept)") %&gt;% 
+  ggplot(aes(x = estimate, y = term, color = modelo)) +
+  geom_pointrange(aes(xmin = conf.low, xmax = conf.high)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  labs(title = "Comparación modelos",
+       subtitle = "Coeficientes de regresión logística (excluye intercepto)",
+       caption = "Data: Gapminder")
+```
+]
+
+.center[
+&lt;img src="ima/plot56.png" width="500px" /&gt;
+]
+
+
+---
+
+## Comparar coeficientes de dos modelos anidados
+
+.codefontchico[
+
+```r
+coef_l_merge %&gt;% 
+  filter(term != "(Intercept)") %&gt;% 
+  ggplot(aes(x = estimate, y = term, color = modelo)) +
+  geom_pointrange(aes(xmin = conf.low, xmax = conf.high)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  labs(title = "Comparación modelos",
+       subtitle = "Coeficientes de regresión logística (excluye intercepto)",
+       caption = "Data: Gapminder") +
+  facet_wrap(~ modelo)
+```
+]
+
+.center[
+&lt;img src="ima/plot_anidado.png" width="500px" /&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Clases y evaluaciones
+
+---
+
+## Clases restantes
+
+- Viernes 11: Clase extra
+
+- Martes 15: Parcial R
+
+- Jueves 17: Reportes con R Markdown y pauta trabajo final 
+
+- Martes 22: Técnicas de programación avanzada
+
+- Jueves 24: Taller trabajo final
+
+- Martes 29: Entrega y presentación del trabajo final
+
+- Jueves 1:  Cierre del curso
+
+---
+
+## Parcial R
+
+- Importar y exportar datos
+
+- Clases y tipos de objetos en R
+
+- Indexación de vectores y dataframes
+
+- Interpetar mensajes de error
+
+- Explorar argumentos de una función
+
+- Verbos del dplyr y pipeline
+
+- Resumir datos con `group_by()` y `summarise()`
+
+- Recodifiación de variables con `case_when()`
+
+- Unir y cambiar de estructura datos
+
+- Gráficos con ggplot2
+
+
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

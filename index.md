@@ -72,6 +72,10 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Solución de ejercicios](/scripts/semana_11_ej_sol.R)
 
 ### Semana 12: Estadística inferencial
+- [Presentación](/r/semana-12.html)
+- [Código de clase](/scripts/semana_12_codigo.R)
+- [Ejercicios](/scripts/semana_12_ej.R)
+- [Solución de ejercicios](/scripts/semana_12_ej_sol.R)
 
 ### Semana 13: Reportes con R Markdown y técnicas de programación avanzadas
 
