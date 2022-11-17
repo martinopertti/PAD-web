@@ -77,9 +77,10 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Ejercicios](/scripts/semana_12_ej.R)
 - [Solución de ejercicios](/scripts/semana_12_ej_sol.R)
 
-### Semana 13: Reportes con R Markdown y técnicas de programación avanzadas
+### Semana 13: Reportes con R Markdown 
+- [Presentación](/r/semana-13.html)
 
-### Semana 14: Segunda evaluación parcial
+### Semana 14: Técnicas de programación avanzadas
 
 ### Semana 15: Introducción a Python
 

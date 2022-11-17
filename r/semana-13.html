@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R Markdown</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R Markdown
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+# Introducción
+
+---
+
+## Introducción a R Markdown
+
+- R Markdown permite crear documentos combinando texto, código y sus resultados. Los documentos de R Mardown tienen extensión `.Rmd` y admiten muchos formatos de salida como archivos PDF, word, HTML o diapositivas.
+
+- Los reportes creados con R Markdown pueden usarse como procesador de texto sin necesidad de incluir código (ej. escribir artículos) o incluir texto y código para mostrar también el proceso detrás de los resultados.
+
+- R Markdown integra un cojunto de paquetes y herramientas externas. Necesita el paquete rmarkdown pero RStudio lo descarga de forma automática así que no es necesario instalar. 
+
+- [R Markdown Cheatsheets](https://rmarkdown.rstudio.com/)
+
+
+
+---
+
+## ¿Por qué usar R Markdown?
+
+- Es libre y gratuito
+
+- Es compatible con varios lenguajes de progrmación
+
+- Muchos formatos de salida
+
+- Facilita la investigación reproducible y la divulgación del conocimiento
+
+
+---
+
+## Formatos de salida
+
+- [Formato PDF](https://github.com/svmiller/svm-r-markdown-templates/blob/master/article-example/svm-rmarkdown-article-example.pdf)
+
+- [Formato HTML personalizado](https://umad-fcs.github.io/Piso-I-OP/)
+
+- [Formato HTML personalizado](https://dipaola-results.verasight.io/)
+
+- Esta misma presentación (con el paquete [xaringan](https://bookdown.org/yihui/rmarkdown/xaringan.html))
+
+
+---
+
+## ¿Cómo se ve un archivo .Rmd?
+
+.center[
+&lt;img src="ima/ima_1.png" width="1000px" /&gt;
+]
+
+---
+
+## Resultado (output)
+
+
+.center[
+&lt;img src="ima/ima_2.png" width="600px" /&gt;
+]
+
+---
+## .Rmd y output
+
+.center[
+&lt;img src="ima/ima_9.png" width="1000px" /&gt;
+]
+
+
+---
+class: inverse, center, middle
+
+# ¿Cómo crear un archivo .Rmd?
+
+---
+
+## ¿Cómo crear un archivo .Rmd?
+
+- Para crear un archivo de R Markdown seleccionamos `File/New File/R Markdown`
+
+- Luego ingresamos nombre, autor y formato de salida (aunque podemos modificarlo luego en el código)
+
+.center[
+&lt;img src="ima/ima_3.png" width="400px" /&gt;
+]
+
+---
+
+## Compilar
+
+Cuando queremos ver el resultado de nuestro archivo .Rmd tenemos que compilarlo (render). Para ello arriba del script veremos un botón que dice `Knit` y luego seleccionamos `knit`. 
+
+Esto generará otro documento con el formato de salida seleccionado. También podemos hacerlo con (`ctrl + shift + k`)
+
+
+---
+
+
+## YAML header
+
+En la parte de arriba de coumento se encuentra el YAML donde definimos el título, autor, la fecha, formato de salida entre otros argumentos, demarcado encima y debajo por `---`
+
+A modo de ejemplo, si queremos exportar un documento en formato HTML, podemos incluir un TOC (table of contents) para ordenar el documento. También podemos elegir un [tema](https://www.datadreaming.org/post/r-markdown-theme-gallery/). Para ello, simplemente incluimos lo siguiente:
+
+.center[
+&lt;img src="ima/ima_4.png" width="400px" /&gt;
+]
+
+---
+
+## Títulos
+
+.pull-left[
+&lt;img src="ima/ima_5.png" width="400px" /&gt;
+]
+
+.pull-right[
+&lt;img src="ima/ima_6.png" width="400px" /&gt;
+]
+
+---
+
+## Formato
+
+Con asteriscos podemos poner texto en negrita y también armar listas
+
+.pull-left[
+&lt;img src="ima/ima_7.png" width="300px" /&gt;
+]
+
+.pull-right[
+&lt;img src="ima/ima_8.png" width="400px" /&gt;
+]
+
+
+---
+
+## Fragmentos de código
+
+- Para insertar un fragmento de código (code chunk) podemos `Ctrl + Alt + I`
+
+- Dentro de el podemos escribir código (que se visualizará de forma distinta en el reporte). Podemos correr el código localmente en el archivo `.Rmd` o que se corra al compilar
+
+- En la primer línea del fragmento de código podemos definir argumentos. Por ejemplo si incluímos `echo = FALSE`, el código no aparecerá pero si el resultado, o si definimos `results = "hide"` veremos el código pero no el resultado. Con `message = FALSE` suprimen los mensajes en la consola (recomendado) y con `eval = FALSE` aparecerá el código (si `echo = TRUE`) pero no será evaluado por R.
+
+- Se ven de esta forma:
+
+.center[
+&lt;img src="ima/ima_10.png" width="800px" /&gt;
+]
+
+---
+
+## Tablas e imagenes
+
+- Hay muchas formas de incluir tablas en un documento de R Markdown. Una de ellas es `knitr::kable()`. Pueden ver más detalles [aquí](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+
+- Para incluir imágenes pueden utilizar `knitr::include_graphics()`.
+
+- Para ambos casos hay un ejemplo en el template
+
+
+---
+class: inverse, center, middle
+
+# Trabajo final
+
+---
+
+## Pauta
+
+Escribir un informe (con R Markdown) que integre código y texto detallando algún procesamiento, análisis o recolección de datos -en su acepción más amplia- que no haya sido visto en el curso. El objetivo es que busquen tutoriales, artículos o libros de análisis de datos en R que no hayan sido vistos en el curso, y que lo apliquen a datos que les interesen. Tienen que describir en qué consiste el análisis, procesamiento o recolección de datos pero lo central es que expliquen cómo funciona el código. 
+
+El trabajo debe:
+
+- Describir el tipo de análisis, procesamiento o recolección de forma conceptual.
+- Describir uso y argumentos de las funciones utilizadas.
+- Aplicar las funciones a datos que no sean los mismos que usan los recursos que toman como fuente.
+- Citar todos los recursos utilizados tanto para código como para la descripción conceptual.
+- Realizar un procesamiento de los datos a utilizar aplicando lo aprendido en el curso
+
+---
+
+## Formalidades
+
+- Fecha de entrega y presentación: 29 de noviembre 
+
+- Se entrega una carpeta con los siguientes elementos:
+  - Proyecto de R
+  - Archivo de R Markdown (.Rmd)
+  - Archivo de salida de R Markdown (HTML o PDF, 2 a 5 carillas)
+  - Script con procesamiento de los datos a utilizar
+  - Data (si aplica)
+
+- Grupos de a 2 o individual
+
+- Taller para consultas 24 de noviembre
+
+---
+
+## Criterio de evaluación
+
+- El trabajo final es el 40% de la nota del curso
+
+- La calificación es sobre 12:
+
+  - 2 puntos por cumplir con todos los elementos requeridos y usarlos de forma correcta
+
+  - 2 puntos por usar de forma adecuada el R Markdown (integrar texto, código, imagenes, tablas, etc.)
+
+  - 2 puntos por crear un script para procesar los datos utilizando lo visto en el curso (con anotaciones sobre por qué estamos haciendo esas transformaciones)
+  
+  - 6 puntos por la descripción y aplicación de las funciones o paquetes que no vimos en el curso. 
+
+---
+
+## Ideas
+
+- Visualizaciones de datos
+  - Gráficos de densidad
+  - Mapas y mapas de calor
+  - Gráficos animados
+- Utilizar datos de encuesta en R 
+  - Tablas ponderadas
+  - Manejar etiquetas
+  - Crear ponderadores
+- Anáisis de texto
+  - Palabras más frecuentes en data de texto
+  - Análisis de sentimiento
+- Conectarse con APIs para extraer datos
+  - Google perspectives
+  - Twitter
+  - Banco Mundial
+  - Our World in Data
+- Webscrapping
+- Estadística avanazada
+  - Modelos específicos
+  - Machine Learning
+- Paquetes para manejar variables de cadenas, fechas, etc.
+
+---
+
+## Datos
+
+- [Kaggle](https://www.kaggle.com/)
+
+- [LAPOP](https://www.vanderbilt.edu/lapop/)
+
+- [Latinobarómetro](https://www.latinobarometro.org/lat.jsp)
+
+- [Encuesta Mundial de Valores](https://www.worldvaluessurvey.org/wvs.jsp)
+
+- [Banco Mundial](https://datos.bancomundial.org/)
+
+- [Our World in Data](https://ourworldindata.org/)
+
+- [Otras](https://github.com/awesomedata/awesome-public-datasets)
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
