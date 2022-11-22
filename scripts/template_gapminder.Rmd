@@ -1,0 +1,86 @@
+---
+title: "Template con datos de Gapminder"
+author: "Martín Opertti"
+date: '2022-10-10'
+output:
+  html_document:
+    theme: flatly
+    toc: yes
+    toc_float: yes
+    smooth_scroll: yes
+    toc_depth: 2
+    number_sections: false 
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Cargo paquetes
+library(gapminder)
+library(knitr)
+```
+
+# Gapminder
+
+## Subtitulo
+
+La Fundación [Gapminder](https://www.gapminder.org/) es una empresa sin fines de lucro registrada en Estocolmo, Suecia, que promueve el desarrollo global sostenible y el logro de los Objetivos de Desarrollo del Milenio de las Naciones Unidas mediante un mayor uso y comprensión de las estadísticas y otra información sobre el **desarrollo social**, **económico** y **ambiental** a nivel local, nacional. y niveles globales
+
+Preparo los datos:
+
+```{r echo=TRUE}
+# Asigno y filtro data
+df_gap <- gapminder::gapminder %>% 
+  filter(country == "Uruguay")
+
+df_gap %>% 
+  kable()
+```
+
+# Gráfico
+
+Incluyo el siguiente código y resultado
+
+```{r echo=TRUE}
+hist(gapminder$lifeExp)
+```
+
+# Imagen
+
+```{r  out.width = "500px", echo=FALSE}
+knitr::include_graphics("gapminder.png")
+```
+
+# Tabla
+
+```{r echo=TRUE, message=FALSE}
+df_gap <- gapminder::gapminder %>% 
+  filter(year >= 1990 & country == "Uruguay")
+
+df_gap %>%  
+  kable() 
+```
+
+
+# Encabezado 1
+
+## Encabezado 2
+
+### Encabezado 3
+
+
+**Lista**
+
+* Items
+  * Item 1
+  * Item 2
+  * Item 3
+
+* Items
+  * Item 1
+  * Item 2
+  * Item 3
+  
+  
+  
+  

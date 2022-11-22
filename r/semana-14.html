@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Programación avanzada</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Departamento de Ciencias Sociales, UCU - Martín Opertti" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="estilo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Programación avanzada
+## Programación para el análisis de datos
+### Departamento de Ciencias Sociales, UCU - Martín Opertti
+
+---
+
+class: inverse, center, middle
+
+
+
+
+# Loops
+
+---
+
+## Loops
+
+Los loops son una forma de repetir una secuencia de operaciones a distintos objetos. En R existen loops de tipo `for`, `while` y `repeat`, veremos solamente los `for` loops que son los más sencillos. Un `for` loop repite líneas de código muchas veces, una para cada elemento de un imput. De forma general:
+
+
+
+
+
+```r
+for (cada_valor in lista_de_valores) {
+  
+  realiza_esta_operacion
+  
+  }
+```
+
+---
+## Loops
+Supongamos que queremos imprimir en la consola los primeros 5 números primos seguidos de la frase "es un número primo". Podríamos hacer esto:
+
+.codefontchico[
+
+```r
+print("2 es un numero primo")
+```
+
+```
+## [1] "2 es un numero primo"
+```
+
+```r
+print("3 es un numero primo")
+```
+
+```
+## [1] "3 es un numero primo"
+```
+
+```r
+print("5 es un numero primo")
+```
+
+```
+## [1] "5 es un numero primo"
+```
+
+```r
+print("7 es un numero primo")
+```
+
+```
+## [1] "7 es un numero primo"
+```
+
+```r
+print("11 es un numero primo")
+```
+
+```
+## [1] "11 es un numero primo"
+```
+]
+
+---
+## Loops
+
+O con un loop:
+
+.codefont[
+
+```r
+numeros_primos &lt;- c(2, 3, 5, 7, 11)
+
+for (i in seq_along(numeros_primos)){
+  
+  print(paste(numeros_primos[i], "es un numero primo"))
+  
+  }
+```
+
+```
+## [1] "2 es un numero primo"
+## [1] "3 es un numero primo"
+## [1] "5 es un numero primo"
+## [1] "7 es un numero primo"
+## [1] "11 es un numero primo"
+```
+]
+
+---
+## Loops
+
+Para guardar el output de un loop debemos crear un objeto vacío para almacenarlo antes, con su dimensión esperada. Esto lo hacemos con la función `vector()`, `list()` o `data.frame()`
+
+.codefont[
+
+```r
+numeros_primos &lt;- c(2, 3, 5, 7, 11)
+
+objeto &lt;- vector("character", # definimos el tipo de los datos  
+                    length(numeros_primos))  # definimos la extensión
+
+for (i in seq_along(numeros_primos)){
+    
+  objeto[i] &lt;- paste(numeros_primos[i], "es un numero primo")
+  
+  }
+
+objeto
+```
+
+```
+## [1] "2 es un numero primo"  "3 es un numero primo"  "5 es un numero primo" 
+## [4] "7 es un numero primo"  "11 es un numero primo"
+```
+]
+
+---
+## Loops
+
+Para crear objetos de forma separada dentro de un loop usamos `assign()`. 
+
+.codefont[
+
+```r
+rm(list=ls())
+
+# Para asignar un nombre a cada elemento
+numeros_primos &lt;- c(2, 3, 5, 7, 11)
+
+# Creo un vector con el nombre de cada objeto
+nom_np &lt;- paste(as.character(numeros_primos), "obj", sep = "_") 
+
+for (i in seq_along(numeros_primos)){
+  
+  assign(nom_np[i], 
+         paste(numeros_primos[i], "es un numero primo")
+         )
+  
+  }
+
+ls()[1:8] # Objetos en el ambiente
+```
+
+```
+## [1] "11_obj"         "2_obj"          "3_obj"          "5_obj"         
+## [5] "7_obj"          "i"              "nom_np"         "numeros_primos"
+```
+]
+
+---
+class: inverse, center, middle
+
+# Listas, dataframes y loops
+
+---
+## Listas
+
+Las listas son una clase de objeto en R que permite almacenar objetos de distintos tipos y tamaños (vectores, dataframes, incluso otras listas). En escencia las listas consisten en englobar en un solo objeto elementos heterogéneos. Se crean utilizando la función `list()`. Por ejemplo:
+
+.codefont[
+
+```r
+d_gap &lt;- gapminder::gapminder
+
+# Crear lista
+ejemplo_lista &lt;- list( c("Uruguay", "Paraguay"), # Vector lenght = 2
+                      d_gap, # Dataframe de gapminder
+                      2 # Valor suelto
+                      )
+class(ejemplo_lista)
+```
+
+```
+## [1] "list"
+```
+
+```r
+# Indexar listas
+ejemplo_lista[[1]] # Primer elemento de lista
+```
+
+```
+## [1] "Uruguay"  "Paraguay"
+```
+
+```r
+ejemplo_lista[[1]][[2]] # Segundo valor del rpimer elemento
+```
+
+```
+## [1] "Paraguay"
+```
+]
+
+
+---
+## Listas de dataframes
+
+Los elementos dentro de una lista pueden ser exclusivamente dataframes. Para ello podemos o crear una lista desde cero asignando los dataframes que la van a componer o tomar un dataframe y dividirlo según una o más variables y que cada una de esas divisiones sea un dataframe que a su vez sea un elemento dentro de una lista. Esto lo podemos hacer con la función `group_split()` de dplyr: 
+.codefontchico[
+
+```r
+# Divido el dataframe de gapminder según continente
+lista_df &lt;- d_gap %&gt;%
+  group_split(continent, named = TRUE) %&gt;% 
+  setNames(sort(unique(d_gap$continent)))
+
+lista_df
+```
+
+```
+## &lt;list_of&lt;
+##   tbl_df&lt;
+##     country  : factor&lt;39935&gt;
+##     continent: factor&lt;be586&gt;
+##     year     : integer
+##     lifeExp  : double
+##     pop      : integer
+##     gdpPercap: double
+##     named    : logical
+##   &gt;
+## &gt;[5]&gt;
+## $Africa
+## # A tibble: 624 x 7
+##    country continent  year lifeExp      pop gdpPercap named
+##    &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;lgl&gt;
+##  1 Algeria Africa     1952    43.1  9279525     2449. TRUE 
+##  2 Algeria Africa     1957    45.7 10270856     3014. TRUE 
+##  3 Algeria Africa     1962    48.3 11000948     2551. TRUE 
+##  4 Algeria Africa     1967    51.4 12760499     3247. TRUE 
+##  5 Algeria Africa     1972    54.5 14760787     4183. TRUE 
+##  6 Algeria Africa     1977    58.0 17152804     4910. TRUE 
+##  7 Algeria Africa     1982    61.4 20033753     5745. TRUE 
+##  8 Algeria Africa     1987    65.8 23254956     5681. TRUE 
+##  9 Algeria Africa     1992    67.7 26298373     5023. TRUE 
+## 10 Algeria Africa     1997    69.2 29072015     4797. TRUE 
+## # ... with 614 more rows
+## 
+## $Americas
+## # A tibble: 300 x 7
+##    country   continent  year lifeExp      pop gdpPercap named
+##    &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;lgl&gt;
+##  1 Argentina Americas   1952    62.5 17876956     5911. TRUE 
+##  2 Argentina Americas   1957    64.4 19610538     6857. TRUE 
+##  3 Argentina Americas   1962    65.1 21283783     7133. TRUE 
+##  4 Argentina Americas   1967    65.6 22934225     8053. TRUE 
+##  5 Argentina Americas   1972    67.1 24779799     9443. TRUE 
+##  6 Argentina Americas   1977    68.5 26983828    10079. TRUE 
+##  7 Argentina Americas   1982    69.9 29341374     8998. TRUE 
+##  8 Argentina Americas   1987    70.8 31620918     9140. TRUE 
+##  9 Argentina Americas   1992    71.9 33958947     9308. TRUE 
+## 10 Argentina Americas   1997    73.3 36203463    10967. TRUE 
+## # ... with 290 more rows
+## 
+## $Asia
+## # A tibble: 396 x 7
+##    country     continent  year lifeExp      pop gdpPercap named
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;lgl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779. TRUE 
+##  2 Afghanistan Asia       1957    30.3  9240934      821. TRUE 
+##  3 Afghanistan Asia       1962    32.0 10267083      853. TRUE 
+##  4 Afghanistan Asia       1967    34.0 11537966      836. TRUE 
+##  5 Afghanistan Asia       1972    36.1 13079460      740. TRUE 
+##  6 Afghanistan Asia       1977    38.4 14880372      786. TRUE 
+##  7 Afghanistan Asia       1982    39.9 12881816      978. TRUE 
+##  8 Afghanistan Asia       1987    40.8 13867957      852. TRUE 
+##  9 Afghanistan Asia       1992    41.7 16317921      649. TRUE 
+## 10 Afghanistan Asia       1997    41.8 22227415      635. TRUE 
+## # ... with 386 more rows
+## 
+## $Europe
+## # A tibble: 360 x 7
+##    country continent  year lifeExp     pop gdpPercap named
+##    &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt; &lt;lgl&gt;
+##  1 Albania Europe     1952    55.2 1282697     1601. TRUE 
+##  2 Albania Europe     1957    59.3 1476505     1942. TRUE 
+##  3 Albania Europe     1962    64.8 1728137     2313. TRUE 
+##  4 Albania Europe     1967    66.2 1984060     2760. TRUE 
+##  5 Albania Europe     1972    67.7 2263554     3313. TRUE 
+##  6 Albania Europe     1977    68.9 2509048     3533. TRUE 
+##  7 Albania Europe     1982    70.4 2780097     3631. TRUE 
+##  8 Albania Europe     1987    72   3075321     3739. TRUE 
+##  9 Albania Europe     1992    71.6 3326498     2497. TRUE 
+## 10 Albania Europe     1997    73.0 3428038     3193. TRUE 
+## # ... with 350 more rows
+## 
+## $Oceania
+## # A tibble: 24 x 7
+##    country   continent  year lifeExp      pop gdpPercap named
+##    &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;lgl&gt;
+##  1 Australia Oceania    1952    69.1  8691212    10040. TRUE 
+##  2 Australia Oceania    1957    70.3  9712569    10950. TRUE 
+##  3 Australia Oceania    1962    70.9 10794968    12217. TRUE 
+##  4 Australia Oceania    1967    71.1 11872264    14526. TRUE 
+##  5 Australia Oceania    1972    71.9 13177000    16789. TRUE 
+##  6 Australia Oceania    1977    73.5 14074100    18334. TRUE 
+##  7 Australia Oceania    1982    74.7 15184200    19477. TRUE 
+##  8 Australia Oceania    1987    76.3 16257249    21889. TRUE 
+##  9 Australia Oceania    1992    77.6 17481977    23425. TRUE 
+## 10 Australia Oceania    1997    78.8 18565243    26998. TRUE 
+## # ... with 14 more rows
+```
+]
+
+---
+## Loops sobre lista con dataframes
+
+Crear listas con dataframes o dividir dataframes en elementos de una lista puede tener muchas ventajas. Una de ellas es crear loops que iteren para cada dataframe dentro de una lista. Por ejemplo, supongamos que estmaos trabjaando con muchos dataframes y queremos guardar todos en una carpeta de forma separada. En vés de utilizar `write.csv()` repeditamente, podemos usar el siguiente loop:
+
+
+```r
+# De esta forma, puedo hacer un loop para guardar cada uno de ellos 
+for (i in seq_along(lista_df)) {
+  
+  filename &lt;-  paste0("resultados/loops/", names(lista_df)[i], ".csv")
+  write.csv(lista_df[[i]], filename)
+  
+  }
+
+# Quedan 5 dataframes guardados en la carpeta resultados/loops
+```
+
+---
+## Loops sobre lista con dataframes
+
+Otro uso que nos puede ahorrar mucho tiempo es leer todos los dataframes de una carpeta mediante un loop. Con `list.files()` obtenemos el nombre de todos los archivos en una carpeta, con `substr()` recortamos el nombre completo para nombrar a los objetos y luego con `assign()` podemos asignar el nombre a cada .csv que leemos con `read_csv()`
+
+.codefont[
+
+```r
+rm(list = ls())
+
+# Lista con dataframes en la carpeta
+filenames &lt;- list.files("resultados/loops", full.names=TRUE)
+
+# Creo la lista con los nombres que va a tener cada base (quitar .csv)
+namesfiles &lt;- substr(filenames, 18, nchar(filenames)-4) 
+
+# Ahora hago un loop para leer cada base
+for (i in seq_along(filenames)) {
+  
+  assign(namesfiles[i], 
+         read_csv(filenames[i])
+         )
+}
+
+ls()
+```
+
+```
+## [1] "Africa"     "Americas"   "Asia"       "Europe"     "filenames" 
+## [6] "i"          "namesfiles" "Oceania"
+```
+]
+
+---
+class: inverse, center, middle
+
+# Funcionales
+
+---
+
+## Funcionales
+
+A pesar de su utilidad, los loops en R son útiles son un poco lentos comparado con otros procedimientos. Por ejemplo, cuando usamos listas de dataframes podemos utilizar otras funciones que corren más rápido y más sencillo como `lapply()` o `map()` que aplica una función a cada elemento de una lista y devuelva la lista modificada. 
+
+.codefontchico[
+
+```r
+# Creamos una lista de dataframes con los 5 dataframes
+lista_df_new &lt;- list(Africa, Americas, Asia, Europe, Oceania)
+
+# Incluir los nombres de los objetos de una lista
+names(lista_df_new) &lt;- c("Africa", "Americas", "Asia", "Europe", "Oceania")
+
+# Usamos map para crear una variable nueva y eliminar una existente 
+# dentro de cada dataframe
+list_df_final &lt;- map(lista_df_new, function(df) {
+  
+  df &lt;- df %&gt;% 
+    mutate(var_nueva = "Valor nuevo") %&gt;% 
+    select(-lifeExp)
+  
+  })
+
+# Chequeamos
+Africa &lt;- list_df_final[[1]] # Extraigo el primer df
+head(Africa, 2)
+```
+
+```
+## # A tibble: 2 x 8
+##    ...1 country continent  year      pop gdpPercap named var_nueva  
+##   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;lgl&gt; &lt;chr&gt;      
+## 1     1 Algeria Africa     1952  9279525     2449. TRUE  Valor nuevo
+## 2     2 Algeria Africa     1957 10270856     3014. TRUE  Valor nuevo
+```
+]
+
+---
+
+## Loop con map() o lapply()
+
+Es más, con `map()` `lapply()` podríamos haber leído las bases de forma más sencilla
+
+.codefont[
+
+```r
+# Podríamos haber hecho todo con lapply() 
+filenames &lt;- list.files("resultados/loops", full.names=TRUE)
+
+lista_df_2 &lt;- map(filenames, read.csv)
+
+# El output es una lista de dataframes, a la cuál le agrego nombres
+names(lista_df_2) &lt;- c("Africa", "Americas", "Asia", "Europe", "Oceania")
+```
+]
+
+---
+
+## De listas de dataframes a dataframes
+
+Cuando utilizamos una lista de dataframes podemos tanto unir todos los dataframes
+
+
+```r
+# Unir dataframes desde una lista
+df_gapminder &lt;- bind_rows(lista_df_2)
+as_tibble(df_gapminder)
+```
+
+```
+## # A tibble: 1,704 x 8
+##        X country continent  year lifeExp      pop gdpPercap named
+##    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;lgl&gt;
+##  1     1 Algeria Africa     1952    43.1  9279525     2449. TRUE 
+##  2     2 Algeria Africa     1957    45.7 10270856     3014. TRUE 
+##  3     3 Algeria Africa     1962    48.3 11000948     2551. TRUE 
+##  4     4 Algeria Africa     1967    51.4 12760499     3247. TRUE 
+##  5     5 Algeria Africa     1972    54.5 14760787     4183. TRUE 
+##  6     6 Algeria Africa     1977    58.0 17152804     4910. TRUE 
+##  7     7 Algeria Africa     1982    61.4 20033753     5745. TRUE 
+##  8     8 Algeria Africa     1987    65.8 23254956     5681. TRUE 
+##  9     9 Algeria Africa     1992    67.7 26298373     5023. TRUE 
+## 10    10 Algeria Africa     1997    69.2 29072015     4797. TRUE 
+## # ... with 1,694 more rows
+```
+
+
+---
+class: inverse, center, middle
+
+# Condicionales
+
+---
+
+## Condicionales
+
+En R podemos utilizar los operadores relacionales y lógicos que ya conocemos para modificar el comportamiento de nuestros scripts. Supongamos que tenemos un script donde cargamos un vector numérico distinto cada vez que lo utilizamos. Queremos una medida de resumen para el vector cada vez que corremos el script. Normalmente usamos la media, pero queremos decirle a R que cuando haya algún valor mayor o igual a 10, calcule la mediana, no la media.
+
+
+```r
+if(condicion){
+  
+  expresion
+  
+} else {
+    
+  otra expresion
+  
+  }
+```
+
+
+---
+
+## Condicionales
+
+
+```r
+vector_numerico &lt;- c(1, 4, 5, 6, 7, 8, 9, 2)
+
+if(max(vector_numerico) &lt; 10){
+  
+  mean(vector_numerico)
+  
+} else {
+    
+  median(vector_numerico)
+  
+  }
+```
+
+```
+## [1] 5.25
+```
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"incremental": true,
+"df_print": "kable",
+"smaller": true,
+"widescreen": true,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

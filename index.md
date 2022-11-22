@@ -79,8 +79,12 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 
 ### Semana 13: Reportes con R Markdown 
 - [Presentación](/r/semana-13.html)
+- [Template](/scripts/template_gapminder.Rmd)
 
-### Semana 14: Técnicas de programación avanzadas
+### Semana 14: Programación avanzadas
+- [Presentación](/r/semana-14.html)
+- [Código de clase](/scripts/semana_14_codigo.R)
+
 
 ### Semana 15: Introducción a Python
 
