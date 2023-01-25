@@ -66,27 +66,28 @@ Esta es la página del curso de Programación para el análisis de datos en cien
 - [Solución de ejercicios](/scripts/semana_10_ej_sol.R)
 
 ### Semana 11: Visualización de datos en R
+*Ciencia detrás de la visualización de datos e introducción a ggplot2*
 - [Presentación](/r/semana-11.html)
 - [Código de clase](/scripts/semana_11_codigo.R)
 - [Ejercicios](/scripts/semana_11_ej.R)
 - [Solución de ejercicios](/scripts/semana_11_ej_sol.R)
 
 ### Semana 12: Estadística inferencial
+*Pruebas de hipótesis, modeles de regresión y visualización*
 - [Presentación](/r/semana-12.html)
 - [Código de clase](/scripts/semana_12_codigo.R)
 - [Ejercicios](/scripts/semana_12_ej.R)
 - [Solución de ejercicios](/scripts/semana_12_ej_sol.R)
 
 ### Semana 13: Reportes con R Markdown 
+* Reportes con R Markdown: texto, código, imágenes y tablas*
 - [Presentación](/r/semana-13.html)
 - [Template](/scripts/template_gapminder.Rmd)
 
-### Semana 14: Programación avanzadas
+### Semana 14: Programación avanzada
+*Listas, loops, funcionales*
 - [Presentación](/r/semana-14.html)
 - [Código de clase](/scripts/semana_14_codigo.R)
-
-
-### Semana 15: Introducción a Python
 
 
 
